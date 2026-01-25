@@ -10,7 +10,7 @@ interface Sparkle {
   delay: number;
 }
 
-export function SparklesBackground() {
+export const SparklesBackground = () => {
   const [scrollY, setScrollY] = useState(0);
   const [sparkles] = useState<Sparkle[]>(() => {
     const newSparkles: Sparkle[] = [];
@@ -56,4 +56,4 @@ export function SparklesBackground() {
       ))}
     </div>
   );
-}
+};

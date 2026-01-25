@@ -1,22 +1,24 @@
 import {
   Carousel,
   GradientBackground,
-  HeaderPage,
   SparklesBackground,
-  DetailsPage,
-  FormPage,
+  Header,
+  Schedule,
+  Details,
+  Form,
 } from "@/components";
 
 export default function Home() {
   return (
-    <div className="relative " style={{ minHeight: "100dvh" }}>
+    <>
       <SparklesBackground />
       <GradientBackground />
       <Carousel>
-        <HeaderPage />
-        <DetailsPage />
-        <FormPage />
+        <Header />
+        <Schedule />
+        <Details />
+        <Form />
       </Carousel>
-    </div>
+    </>
   );
 };

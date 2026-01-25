@@ -180,7 +180,7 @@ html {
 }
 
 .animate-bounce-gentle {
-  animation: bounce-gentle 2s infinite;
+  animation: bounce-gentle 1s infinite;
 }
 
 /* Shimmer Animation */
@@ -194,7 +194,7 @@ html {
 }
 
 .animate-shimmer {
-  animation: shimmer 3s linear infinite;
+  animation: shimmer 1s linear infinite;
 }
 
 /* Gradient Shift Animation */

@@ -1,5 +1,3 @@
-"use client";
-
 import { AlertCircle, PartyPopper } from "lucide-react";
 
 export const Header = () => {
@@ -13,7 +11,7 @@ export const Header = () => {
         <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping-slow" />
         <div className="absolute inset-0 rounded-full bg-primary/5 animate-pulse-slow" />
         <div className="absolute inset-2 rounded-full bg-white/80 dark:bg-background/80" />
-        <PartyPopper className="w-12 h-12 text-primary relative z-10 animate-bounce-gentle hover:scale-110 transition-transform cursor-pointer" />
+        <PartyPopper className="w-12 h-12 text-primary relative z-10 animate-bounce-gentle transition-transform cursor-pointer" />
       </div>
 
       {/* Invitation text with slide-up animation */}
@@ -31,7 +29,7 @@ export const Header = () => {
         className="text-5xl md:text-7xl font-display font-bold mb-4 animate-slide-in-up"
         style={{ animationDelay: "0.3s", animationFillMode: "both" }}
       >
-        <span className="inline-block bg-linear-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-gradient-shift hover:scale-105 transition-transform cursor-default">
+        <span className="inline-block bg-linear-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-gradient-shift transition-transform cursor-default">
           ¡Gran Fiesta!
         </span>
       </h1>

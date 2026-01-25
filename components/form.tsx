@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller, useWatch } from "react-hook-form";
-import { Check, Loader2, UserPlus, AlertCircle } from "lucide-react";
-import { Button, Form, Input, Label, TextArea, TextField } from "@heroui/react";
+import { Check, Loader2, UserPlus, AlertCircle, Lock } from "lucide-react";
+import { Button, Form as FormHeroui, Input, Label, TextArea, TextField } from "@heroui/react";
 import { SwitchComponent } from "./switch";
 
 interface FormData {
@@ -15,7 +15,7 @@ interface FormData {
   companionName: string;
 }
 
-export function FormComponent() {
+export const Form = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -23,6 +23,7 @@ export function FormComponent() {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormData>({
     defaultValues: {
       name: "Juan Perez",
@@ -37,6 +38,14 @@ export function FormComponent() {
 
   const willAttend = useWatch({ control, name: "willAttend" });
   const bringCompanion = useWatch({ control, name: "bringCompanion" });
+
+  // Effect to handle willAttend state changes
+  useEffect(() => {
+    if (!willAttend) {
+      setValue("bringCompanion", false);
+      setValue("companionName", "");
+    }
+  }, [willAttend, setValue]);
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
@@ -53,7 +62,7 @@ export function FormComponent() {
   };
 
   return (
-    <div className="relative px-4">
+    <div className="relative p-8">
       <div className="relative max-w-3xl mx-auto">
         {/* Animated Form Container with Hover Glow Effect */}
         <div
@@ -61,11 +70,11 @@ export function FormComponent() {
           style={{ animationDelay: "0.1s", animationFillMode: "both" }}
         >
           <div className="group relative">
-            {/* Animated Glow Border (on hover) */}
-            <div className="absolute -inset-0.5 bg-linear-to-r from-accent via-primary to-accent rounded-2xl opacity-0 group-hover:opacity-75 blur transition duration-500" />
+            {/* Animated Glow Border */}
+            <div className="absolute -inset-0.5 bg-linear-to-r from-accent via-primary to-accent rounded-2xl opacity-75 blur transition duration-500" />
 
             <div className="relative transform transition-all duration-300">
-              <Form
+              <FormHeroui
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex w-full flex-col gap-5 rounded-2xl backdrop-blur-sm bg-surface/90 border border-border/30 shadow-lg p-6 sm:p-8"
               >
@@ -98,10 +107,15 @@ export function FormComponent() {
                         type="text"
                         className="group"
                       >
-                        <Label className="text-sm font-medium text-muted">Invitado/a</Label>
+                        <div className="flex items-center gap-2">
+                          <Label className="text-sm font-medium text-muted">Invitado/a</Label>
+                          <div className="flex items-center gap-1.5 text-xs text-muted/70">
+                            <Lock className="h-3.5 w-3.5" />
+                          </div>
+                        </div>
                         <Input
                           {...field}
-                          className="transition-all duration-300 opacity-80"
+                          className="transition-all duration-300 bg-muted/20 cursor-not-allowed border-dashed"
                         />
                       </TextField>
                     )}
@@ -117,10 +131,15 @@ export function FormComponent() {
                         type="text"
                         className="group"
                       >
-                        <Label className="text-sm font-medium text-muted">Organizador</Label>
+                        <div className="flex items-center gap-2">
+                          <Label className="text-sm font-medium text-muted">Organizador</Label>
+                          <div className="flex items-center gap-1.5 text-xs text-muted/70">
+                            <Lock className="h-3.5 w-3.5" />
+                          </div>
+                        </div>
                         <Input
                           {...field}
-                          className="transition-all duration-300 opacity-80"
+                          className="transition-all duration-300 bg-muted/20 cursor-not-allowed border-dashed"
                         />
                       </TextField>
                     )}
@@ -147,11 +166,11 @@ export function FormComponent() {
                       const isNearLimit = charCount > maxChars * 0.8;
 
                       return (
-                        <div className="flex flex-col gap-2 group w-full">
+                        <div className="flex flex-col gap-2 group/notes w-full">
                           <div className="flex items-center justify-between">
                             <Label
                               htmlFor="notes"
-                              className="text-sm font-medium transition-all duration-300 group-focus-within:text-accent"
+                              className="text-sm font-medium transition-all duration-300 group-focus-within/notes:text-accent"
                             >
                               Notas adicionales
                             </Label>
@@ -164,16 +183,16 @@ export function FormComponent() {
                               {charCount}/{maxChars}
                             </span>
                           </div>
-                          <div className="relative group/textarea w-full">
+                          <div className="relative w-full">
                             {/* Focus ring effect */}
-                            <div className="absolute -inset-0.5 bg-linear-to-r from-accent/0 via-accent/50 to-primary/0 rounded-lg opacity-0 group-focus-within/textarea:opacity-100 blur transition duration-300" />
+                            <div className="absolute -inset-0.5 bg-linear-to-r from-accent/0 via-accent/50 to-primary/0 rounded-lg opacity-0 group-focus-within/notes:opacity-100 blur transition duration-300" />
                             <TextArea
                               {...field}
                               id="notes"
                               aria-label="Mensaje para el organizador"
                               placeholder="Mensaje para el organizador..."
                               rows={4}
-                              className="relative w-full transition-all duration-300 hover:shadow-md focus:shadow-xl"
+                              className="relative w-full transition-all duration-300 focus:shadow-xl"
                             />
                           </div>
                           {errors.notes && (
@@ -193,12 +212,12 @@ export function FormComponent() {
                   className="animate-slide-in-up"
                   style={{ animationDelay: "0.5s", animationFillMode: "both" }}
                 >
-                  <div className="space-y-4 rounded-xl bg-linear-to-br from-accent/5 to-primary/5 p-4 border border-accent/10 transition-all duration-500 hover:from-accent/10 hover:to-primary/10 hover:border-accent-soft-hover hover:shadow-lg">
+                  <div className="space-y-4 rounded-xl bg-linear-to-br from-accent/5 to-primary/5 p-4 border border-accent/10 transition-all duration-500">
                     <Controller
                       name="willAttend"
                       control={control}
                       render={({ field: { onChange, value } }) => (
-                        <div className="transform transition-all duration-300 hover:translate-x-1">
+                        <div className="transform transition-all duration-300">
                           <SwitchComponent
                             label="¿Confirmar asistencia?"
                             name="willAttend"
@@ -219,7 +238,7 @@ export function FormComponent() {
                           name="bringCompanion"
                           control={control}
                           render={({ field: { onChange, value } }) => (
-                            <div className="transform transition-all duration-300 hover:translate-x-1">
+                            <div className="transform transition-all duration-300">
                               <SwitchComponent
                                 label="¿Traerás acompañante?"
                                 name="bringCompanion"
@@ -244,24 +263,24 @@ export function FormComponent() {
                                 },
                               }}
                               render={({ field }) => (
-                                <div className="flex flex-col gap-2 group w-full">
+                                <div className="flex flex-col gap-2 group/companion w-full">
                                   <Label
                                     htmlFor="companionName"
-                                    className="text-sm font-medium transition-all duration-300 group-focus-within:text-accent"
+                                    className="text-sm font-medium transition-all duration-300 group-focus-within/companion:text-accent"
                                   >
                                     <div className="flex items-center gap-2">
-                                      <UserPlus className="h-4 w-4 transition-transform group-focus-within:scale-110" />
+                                      <UserPlus className="h-4 w-4 transition-transform group-focus-within/companion:scale-110" />
                                       Nombre del acompañante
                                     </div>
                                   </Label>
                                   <div className="relative w-full">
                                     {/* Focus ring effect */}
-                                    <div className="absolute -inset-0.5 bg-linear-to-r from-accent/0 via-accent/50 to-primary/0 rounded-lg opacity-0 group-focus-within:opacity-100 blur transition duration-300" />
+                                    <div className="absolute -inset-0.5 bg-linear-to-r from-accent/0 via-accent/50 to-primary/0 rounded-lg opacity-0 group-focus-within/companion:opacity-100 blur transition duration-300" />
                                     <Input
                                       {...field}
                                       id="companionName"
                                       placeholder="Nombre de tu +1"
-                                      className="relative w-full transition-all duration-300 hover:shadow-md focus:shadow-xl"
+                                      className="relative w-full transition-all duration-300 focus:shadow-xl"
                                     />
                                   </div>
                                   {errors.companionName && (
@@ -291,17 +310,12 @@ export function FormComponent() {
                     className={`
                       group relative flex-1 overflow-hidden transition-all duration-500
                       ${isSuccess
-                        ? 'bg-success hover:bg-success scale-100'
-                        : 'hover:scale-[1.02] hover:shadow-2xl active:scale-[0.98]'
+                        ? 'bg-success scale-100'
+                        : 'active:scale-[0.98]'
                       }
                       ${!willAttend ? 'opacity-50' : 'opacity-100'}
                     `}
                   >
-                    {/* Animated Background Shimmer */}
-                    {!isSubmitting && !isSuccess && willAttend && (
-                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 animate-shimmer" />
-                    )}
-
                     {/* Button Content */}
                     <div className="relative flex items-center justify-center gap-2">
                       {isSubmitting && (
@@ -311,7 +325,7 @@ export function FormComponent() {
                         <Check className="h-5 w-5 animate-bounce-gentle" />
                       )}
                       {!isSubmitting && !isSuccess && (
-                        <Check className="h-5 w-5 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+                        <Check className="h-5 w-5 transition-transform duration-300" />
                       )}
                       <span className="font-semibold">
                         {isSubmitting
@@ -343,7 +357,7 @@ export function FormComponent() {
                     </div>
                   </div>
                 )}
-              </Form>
+              </FormHeroui>
             </div>
           </div>
         </div>

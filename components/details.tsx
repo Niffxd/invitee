@@ -27,7 +27,28 @@ export const Details = () => {
 
             <div className="relative">
               <Card className="w-full p-6 backdrop-blur-sm bg-surface/90 border border-border/30 shadow-lg">
-                <h3 className="text-xl font-bold text-foreground mb-4">¿Qué tendremos?</h3>
+                <h3 className="text-xl font-bold text-foreground mb-4">¿Qué necesitas traer?</h3>
+                <ul className="space-y-3">
+                  {partyNeeds.map((need, index) => (
+                    <li
+                      key={index}
+                      className="flex items-start gap-3"
+                    >
+                      <div className="text-accent mt-0.5">
+                        {need.icon}
+                      </div>
+                      <div className="flex-1">
+                        <span className="text-sm sm:text-base font-bold text-foreground block">
+                          {need.name}
+                        </span>
+                        <span className="text-xs sm:text-sm text-muted">
+                          {need.description}
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <h3 className="text-xl font-bold text-foreground mt-6 mb-4">¿Qué tendremos?</h3>
                 <ul className="space-y-3 mb-6">
                   {partyFeatures.map((feature, index) => (
                     <li
@@ -48,29 +69,6 @@ export const Details = () => {
                     </li>
                   ))}
                 </ul>
-                <div className="border-t border-border/30">
-                  <h3 className="text-xl font-bold text-foreground mb-4">¿Qué necesitas traer?</h3>
-                  <ul className="space-y-3">
-                    {partyNeeds.map((need, index) => (
-                      <li
-                        key={index}
-                        className="flex items-start gap-3"
-                      >
-                        <div className="text-accent mt-0.5">
-                          {need.icon}
-                        </div>
-                        <div className="flex-1">
-                          <span className="text-sm sm:text-base font-bold text-foreground block">
-                            {need.name}
-                          </span>
-                          <span className="text-xs sm:text-sm text-muted">
-                            {need.description}
-                          </span>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
               </Card>
             </div>
           </div>

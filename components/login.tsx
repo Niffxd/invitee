@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useForm, Controller, useWatch } from "react-hook-form";
-import { LogIn, Loader2, AlertCircle, User, Lock, Shield } from "lucide-react";
+import { LogIn, Loader2, AlertCircle, User, Lock, Shield, Eye, EyeOff } from "lucide-react";
 import { Button, Form, Input, Label, TextField } from "@heroui/react";
 import { showToast } from "./toast";
 
@@ -13,6 +13,7 @@ interface LoginFormData {
 
 export const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     control,
@@ -177,7 +178,7 @@ export const Login = () => {
                   <TextField
                     name="pass-field"
                     type="password"
-                    className="w-full"
+                    className="w-full relative"
                   >
                     <Label className="text-sm font-medium text-foreground flex items-center gap-2">
                       <Lock className="h-4 w-4 text-muted" />
@@ -185,11 +186,25 @@ export const Login = () => {
                     </Label>
                     <Input
                       {...field}
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="********"
                       autoComplete="new-password"
-                      className="border border-border"
+                      className={`border border-border ${field.value ? 'pr-10' : ''}`}
                     />
+                    {field.value && (
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-[calc(50%+0.75rem)] -translate-y-1/2 text-muted hover:text-foreground transition-colors z-10"
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </button>
+                    )}
                     {errors.password && (
                       <div className="flex items-center gap-2 text-sm text-danger mt-2">
                         <AlertCircle className="h-4 w-4 shrink-0" />

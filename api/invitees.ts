@@ -11,7 +11,7 @@ import { InviteeProps, UpdateInviteeProps, PlusOne } from "@/types";
 export const createInvitee = async (name: string): Promise<string> => {
   const inviteeId = uuidv4();
   const inviteeRef = doc(db, "invitees", inviteeId);
-  
+
   await setDoc(inviteeRef, {
     inviteeId,
     name,
@@ -38,7 +38,7 @@ export const createInvitees = async (names: string[]): Promise<string[]> => {
     const inviteeId = uuidv4();
     inviteeIds.push(inviteeId);
     const inviteeRef = doc(db, "invitees", inviteeId);
-    
+
     batch.set(inviteeRef, {
       inviteeId,
       name,

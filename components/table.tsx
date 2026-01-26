@@ -1,7 +1,6 @@
-import { flexRender, Table } from "@tanstack/react-table";
-import { InviteeStats } from "./types";
+import { flexRender, Table as ReactTable } from "@tanstack/react-table";
 
-export const DashboardTable = ({ table }: { table: Table<InviteeStats> }) => {
+export const Table = <T,>({ table }: { table: ReactTable<T> }) => {
   return (
     <table className="w-full">
       <thead>

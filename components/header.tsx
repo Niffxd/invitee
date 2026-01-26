@@ -1,18 +1,21 @@
 import { AlertCircle, PartyPopper } from "lucide-react";
+import { LoginLink } from "./login-link";
 
 export const Header = () => {
   return (
     <div className="text-center relative py-12">
       {/* Icon with enhanced animations */}
-      <div
-        className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-br from-primary/40 via-primary/30 to-primary/20 mb-6 relative shadow-lg animate-scale-in"
-        style={{ animationDelay: "0.1s", animationFillMode: "both" }}
-      >
-        <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping-slow" />
-        <div className="absolute inset-0 rounded-full bg-primary/5 animate-pulse-slow" />
-        <div className="absolute inset-2 rounded-full bg-white/80 dark:bg-background/80" />
-        <PartyPopper className="w-12 h-12 text-primary relative z-10 animate-bounce-gentle transition-transform cursor-pointer" />
-      </div>
+      <LoginLink>
+        <div
+          className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-br from-primary/40 via-primary/30 to-primary/20 mb-6 relative shadow-lg animate-scale-in"
+          style={{ animationDelay: "0.1s", animationFillMode: "both" }}
+        >
+          <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping-slow" />
+          <div className="absolute inset-0 rounded-full bg-primary/5 animate-pulse-slow" />
+          <div className="absolute inset-2 rounded-full bg-white/80 dark:bg-background/80" />
+          <PartyPopper className="w-12 h-12 text-primary relative z-50 animate-bounce-gentle transition-transform cursor-pointer" />
+        </div>
+      </LoginLink>
 
       {/* Invitation text with slide-up animation */}
       <p

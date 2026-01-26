@@ -7,10 +7,12 @@ import {
   Details,
   Form,
 } from "@/components";
+import { Toast } from "@heroui/react";
 
 export default function Home() {
   return (
     <>
+      <Toast.Container placement="bottom" />
       <SparklesBackground />
       <GradientBackground />
       <Carousel>

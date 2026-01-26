@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useParams } from 'next/navigation'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Check, Loader2, UserPlus, AlertCircle, Lock } from "lucide-react";
 import { Button, Form as FormHeroui, Input, Label, TextArea, TextField } from "@heroui/react";
 import { SwitchComponent } from "./switch";
+import { showToast } from "./toast";
 
 interface FormData {
   name: string;
@@ -17,7 +19,10 @@ interface FormData {
 
 export const Form = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+
+  const { inviteeId } = useParams();
+
+  console.log(inviteeId);
 
   const {
     control,
@@ -26,7 +31,7 @@ export const Form = () => {
     setValue,
   } = useForm<FormData>({
     defaultValues: {
-      name: "Juan Perez",
+      name: inviteeId as string,
       host: "Nicolás Sanchez",
       notes: "",
       willAttend: false,
@@ -55,10 +60,14 @@ export const Form = () => {
 
     console.log("Form submitted:", data);
     setIsSubmitting(false);
-    setIsSuccess(true);
 
-    // Reset success state after animation
-    setTimeout(() => setIsSuccess(false), 3000);
+    // Show success toast
+    showToast({
+      text: "¡Tu asistencia ha sido confirmada exitosamente!",
+      variant: "success",
+      icon: <Check />,
+      description: "Gracias por confirmar tu asistencia",
+    });
   };
 
   return (
@@ -306,13 +315,10 @@ export const Form = () => {
                 >
                   <Button
                     type="submit"
-                    isDisabled={isSubmitting || isSuccess || !willAttend}
+                    isDisabled={isSubmitting || !willAttend}
                     className={`
                       group relative flex-1 overflow-hidden transition-all duration-500
-                      ${isSuccess
-                        ? 'bg-success scale-100'
-                        : 'active:scale-[0.98]'
-                      }
+                      active:scale-[0.98]
                       ${!willAttend ? 'opacity-50' : 'opacity-100'}
                     `}
                   >
@@ -321,42 +327,19 @@ export const Form = () => {
                       {isSubmitting && (
                         <Loader2 className="h-5 w-5 animate-spin" />
                       )}
-                      {isSuccess && (
-                        <Check className="h-5 w-5 animate-bounce-gentle" />
-                      )}
-                      {!isSubmitting && !isSuccess && (
+                      {!isSubmitting && (
                         <Check className="h-5 w-5 transition-transform duration-300" />
                       )}
                       <span className="font-semibold">
                         {isSubmitting
                           ? "Enviando..."
-                          : isSuccess
-                            ? "¡Confirmado!"
-                            : "Confirmar asistencia"
+                          : "Confirmar asistencia"
                         }
                       </span>
                     </div>
-
-                    {/* Success Pulse Ring */}
-                    {isSuccess && (
-                      <div className="absolute inset-0 rounded-lg animate-ping-slow bg-success-soft-hover" />
-                    )}
                   </Button>
                 </div>
 
-                {/* Success Message with Enhanced Animation */}
-                {isSuccess && (
-                  <div className="animate-slide-in-down">
-                    <div className="rounded-lg bg-linear-to-r from-success/10 via-success-soft-hover to-success/10 border border-success/30 p-4 text-center shadow-lg">
-                      <div className="flex items-center justify-center gap-2">
-                        <Check className="h-5 w-5 text-success animate-bounce-gentle" />
-                        <span className="text-sm font-semibold text-success">
-                          ¡Tu asistencia ha sido confirmada exitosamente!
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </FormHeroui>
             </div>
           </div>

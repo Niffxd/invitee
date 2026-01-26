@@ -1,36 +1,177 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Invitee
+
+A modern, animated event invitation and RSVP management application built with Next.js, Firebase, and HeroUI.
+
+## Overview
+
+Invitee is a sleek web application designed for managing event invitations and tracking guest RSVPs. It features a beautiful, animated user interface with a carousel-based layout that guides guests through event details and confirmation.
+
+## Features
+
+### Guest-Facing Features
+- 🎨 **Modern Animated UI** - Smooth carousel navigation with sparkle and gradient background effects
+- ✅ **RSVP Confirmation** - Easy-to-use form for guests to confirm attendance
+- 👥 **Plus One Support** - Guests can indicate if they're bringing a companion
+- 📝 **Notes & Messages** - Guests can leave notes for the event organizer
+- 🔔 **Toast Notifications** - Real-time feedback for form submissions
+- 📱 **Fully Responsive** - Works seamlessly on desktop and mobile devices
+
+### Event Management Features
+- 📊 **Dashboard** - Admin interface for managing invitations
+- 🔥 **Firebase Integration** - Real-time database for guest data
+- 🎟️ **Unique Invite Links** - Each guest receives a personalized invitation URL
+- 📈 **Guest Tracking** - Track confirmations, plus ones, and guest notes
+
+## Tech Stack
+
+- **Framework:** [Next.js 16](https://nextjs.org/) (React 19)
+- **UI Library:** [HeroUI 3.0](https://heroui.dev/) (Beta)
+- **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
+- **Database:** [Firebase Firestore](https://firebase.google.com/docs/firestore)
+- **Animations:** [Motion](https://motion.dev/)
+- **Form Management:** [React Hook Form](https://react-hook-form.com/)
+- **Icons:** [Lucide React](https://lucide.dev/)
+- **Language:** TypeScript
+
+## Project Structure
+
+```
+invitee/
+├── app/                    # Next.js App Router
+│   ├── dashboard/         # Admin dashboard page
+│   ├── layout.tsx         # Root layout with backgrounds
+│   ├── page.tsx           # Main invitation page
+│   ├── not-found.tsx      # 404 page
+│   └── globals.css        # Global styles
+├── components/            # React components
+│   ├── carousel.tsx       # Carousel container
+│   ├── form.tsx           # RSVP form
+│   ├── header.tsx         # Event header
+│   ├── schedule.tsx       # Event schedule
+│   ├── details.tsx        # Event details
+│   ├── sparkles.tsx       # Sparkle background effect
+│   ├── gradient.tsx       # Gradient background
+│   └── ...               # Other UI components
+├── db/                    # Firebase configuration
+│   └── firebase.ts        # Firebase initialization
+├── helpers/               # Helper functions
+│   └── invitees.ts        # CRUD operations for invitees
+├── types/                 # TypeScript type definitions
+│   ├── invitee.ts         # Invitee types
+│   └── plusOne.ts         # Plus one types
+└── package.json           # Project dependencies
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 20+ (or compatible version)
+- pnpm package manager
+- Firebase project with Firestore enabled
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd invitee
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up Firebase:
+   - Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
+   - Enable Firestore Database
+   - Copy your Firebase configuration
+   - Update `db/firebase.ts` with your credentials (consider using environment variables for production)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run the development server:
+```bash
+pnpm dev
+```
 
-## Learn More
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-To learn more about Next.js, take a look at the following resources:
+### Build for Production
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm build
+pnpm start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Firebase Data Structure
 
-## Deploy on Vercel
+### Collections
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### `invitees`
+```typescript
+{
+  inviteeId: string;        // Unique UUID
+  name: string;             // Guest name
+  isConfirmed: boolean;     // Attendance confirmation
+  hasPlusOne: boolean;      // Whether bringing a +1
+  notes: string;            // Additional notes
+  createdAt: Timestamp;     // Creation timestamp
+  updatedAt: Timestamp;     // Last update timestamp
+}
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### `plusOnes`
+```typescript
+{
+  plusOneId: string;        // Unique UUID
+  inviteeId: string;        // Reference to invitee
+  name: string;             // Plus one name
+  createdAt: Timestamp;     // Creation timestamp
+  updatedAt: Timestamp;     // Last update timestamp
+}
+```
+
+## Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
+
+## API Functions
+
+The application includes helper functions for managing invitees:
+
+- `createInvitee(name)` - Create a single invitee
+- `createInvitees(names[])` - Batch create multiple invitees
+- `updateInvitee(inviteeId, data)` - Update invitee details
+- `getInvitee(inviteeId)` - Retrieve single invitee
+- `getInvitees()` - Get all invitees
+- `deleteInvitee(inviteeId)` - Delete invitee and associated plus one
+- `getAllPlusOne()` - Get all plus ones
+- `deletePlusOne(plusOneId)` - Delete a plus one
+
+## Development Notes
+
+- The application uses dark mode by default
+- All animations use CSS transitions and Motion library
+- Form validation is handled by React Hook Form
+- Toast notifications provide user feedback
+- The carousel component enables smooth section navigation
+
+## Security Considerations
+
+⚠️ **Important:** The Firebase configuration in `db/firebase.ts` contains API keys. For production:
+
+1. Move sensitive credentials to environment variables
+2. Set up Firebase Security Rules
+3. Implement proper authentication
+4. Use Firebase App Check for abuse prevention
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is private and intended for personal use.

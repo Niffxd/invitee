@@ -1,40 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import admin from 'firebase-admin';
 import bcrypt from 'bcryptjs';
-import path from 'path';
-import { readFileSync } from 'fs';
+import { getAdminDb } from '@/db/admin';
 
-// Initialize Firebase Admin (only if not already initialized)
-if (!admin.apps.length) {
-  try {
-    let credential;
-
-    // For production (Vercel): use environment variables
-    if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_PRIVATE_KEY && process.env.FIREBASE_CLIENT_EMAIL) {
-      credential = admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        // Vercel stores multiline strings with \n as literal characters, so we need to replace them
-        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      });
-    } 
-    // For local development: use service account key file
-    else {
-      const serviceAccountPath = path.join(process.cwd(), 'scripts', 'serviceAccountKey.json');
-      const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
-      credential = admin.credential.cert(serviceAccount);
-    }
-    
-    admin.initializeApp({
-      credential: credential
-    });
-  } catch (error) {
-    console.error('Failed to initialize Firebase Admin:', error);
-    throw error;
-  }
-}
-
-const db = admin.firestore();
+const db = getAdminDb();
 
 export async function POST(request: NextRequest) {
   try {

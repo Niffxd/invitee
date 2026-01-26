@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
-import { Table as DashboardTable } from "@/components";
+import { Table as DashboardTable, Loading } from "@/components";
 import { CredentialProps } from "@/types";
-import { dashboardColumns, inviteeStatsData } from "./table";
+import { dashboardColumns, inviteeStatsData, InviteeStats } from "./table";
 import { DashboardNavbar } from "./navbar";
 import { DashboardActions } from "./actions";
-import { InviteeStats } from "./table/types";
-import { Loading } from "../loading";
 
 export const Dashboard = () => {
   const router = useRouter();

@@ -1,11 +1,11 @@
 import { AlertCircle, PartyPopper } from "lucide-react";
 import { LoginLink } from "./login-link";
 
-export const Header = () => {
+export const Header = ({ inviteeId }: { inviteeId: string | undefined }) => {
   return (
     <div className="text-center relative py-12">
       {/* Icon with enhanced animations */}
-      <LoginLink>
+      <LoginLink enable={!(inviteeId !== typeof String || inviteeId === undefined)}>
         <div
           className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-br from-primary/40 via-primary/30 to-primary/20 mb-6 relative shadow-lg animate-scale-in"
           style={{ animationDelay: "0.1s", animationFillMode: "both" }}

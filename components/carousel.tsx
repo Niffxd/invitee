@@ -30,7 +30,9 @@ export const Carousel = ({ children }: CarouselProps) => {
   const touchEndX = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const totalPages = children?.length ?? 0;
+  // Filter out falsy children (null, undefined, false)
+  const validChildren = children?.filter(child => child != null && child !== false) ?? [];
+  const totalPages = validChildren.length;
 
   const goToPage = (pageIndex: number) => {
     if (pageIndex >= 0 && pageIndex < totalPages && !isTransitioning) {
@@ -137,7 +139,7 @@ export const Carousel = ({ children }: CarouselProps) => {
             transform: `translateX(-${currentPage * 100}%)`,
           }}
         >
-          {children?.map((child, index) => {
+          {validChildren.map((child, index) => {
             const isActive = currentPage === index;
             const hasBeenViewed = viewedSlides.has(index);
             const visitCount = visitCounts[index] || 0;

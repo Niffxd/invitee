@@ -12,5 +12,7 @@ export * from "./schedule";
 export * from "./sparkles";
 export * from "./switch";
 export * from "./scroll-reveal";
+export * from "./table";
 export * from "./toast";
 export * from "./wrapper";
+export * from "./select";

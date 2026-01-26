@@ -1,7 +1,5 @@
 import {
   Carousel,
-  GradientBackground,
-  SparklesBackground,
   Header,
   Schedule,
   Details,
@@ -13,8 +11,6 @@ export default function Home() {
   return (
     <>
       <Toast.Container placement="bottom" />
-      <SparklesBackground />
-      <GradientBackground />
       <Carousel>
         <Header />
         <Schedule />

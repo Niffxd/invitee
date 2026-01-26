@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SparklesBackground, GradientBackground } from "@/components";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,6 +15,8 @@ export default function RootLayout({
   return (
     <html className="dark" data-theme="dark" suppressHydrationWarning>
       <body className="bg-background text-foreground">
+        <SparklesBackground />
+        <GradientBackground />
         {children}
       </body>
     </html>

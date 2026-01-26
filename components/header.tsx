@@ -54,9 +54,9 @@ export const Header = () => {
       >
         <div className="rounded-lg bg-linear-to-r from-primary/10 via-accent/10 to-primary/10 border border-primary/20 p-3 mb-4">
           <div className="flex items-center gap-2">
-            <AlertCircle className="h-4 w-4 text-primary shrink-0" />
-            <span className="text-xs sm:text-sm text-foreground/80">
-              <strong className="font-semibold text-primary"></strong> Esta invitación es única para cada persona
+            <AlertCircle className="h-4 w-4 text-yellow-500 shrink-0" />
+            <span className="text-xs sm:text-sm text-yellow-500">
+              <strong className="font-semibold text-yellow-500"></strong> Esta invitación es única para cada persona
             </span>
           </div>
         </div>

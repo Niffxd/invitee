@@ -45,14 +45,35 @@ From the downloaded JSON file, you need three values:
 
 #### Variable 3: FIREBASE_PRIVATE_KEY
 - **Name:** `FIREBASE_PRIVATE_KEY`
-- **Value:** The entire private key string, including `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----`
+- **Value:** The entire private key string from your JSON file
 - **Environment:** Production, Preview, Development (select all)
 
-**IMPORTANT for FIREBASE_PRIVATE_KEY:**
-- Copy the entire `private_key` value from the JSON file
-- Make sure to include the `\n` characters as-is (don't convert them to actual newlines)
-- The value should look like: `"-----BEGIN PRIVATE KEY-----\nMIIEvQIBADA...\n-----END PRIVATE KEY-----\n"`
-- Vercel will automatically handle the `\n` conversion
+**IMPORTANT - How to add FIREBASE_PRIVATE_KEY correctly:**
+
+There are two methods to add this in Vercel:
+
+**Method 1: Copy directly from JSON file (Recommended)**
+1. Open your `serviceAccountKey.json` file
+2. Find the `"private_key"` field
+3. Copy the ENTIRE value including the quotes, `\n` characters, and everything between the quotes
+4. Paste it directly into Vercel (including the quotes)
+5. Example: `"-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBg...\n-----END PRIVATE KEY-----\n"`
+
+**Method 2: As a multiline string**
+1. Copy just the key content (without the surrounding quotes from JSON)
+2. The value should look like this (multiline):
+```
+-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC...
+... (more lines of the key) ...
+-----END PRIVATE KEY-----
+```
+
+**Common Issues:**
+- ❌ Don't remove the `\n` characters if using Method 1
+- ❌ Don't add extra spaces or newlines
+- ✅ The code will automatically format the key correctly
+- ✅ Make sure to include `-----BEGIN PRIVATE KEY-----` and `-----END PRIVATE KEY-----`
 
 ### Step 4: Redeploy
 
@@ -95,6 +116,25 @@ For local development, you can continue using the `scripts/serviceAccountKey.jso
 
 ## Troubleshooting
 
+### Error: "Failed to parse private key: Invalid PEM formatted message"
+This is the most common error. The private key is not properly formatted. Try these solutions:
+
+**Solution 1: Re-add the private key with quotes**
+1. Go to Vercel → Settings → Environment Variables
+2. Delete the existing `FIREBASE_PRIVATE_KEY` variable
+3. Open your `serviceAccountKey.json` file
+4. Copy the entire `private_key` value INCLUDING the surrounding double quotes
+5. Example: `"-----BEGIN PRIVATE KEY-----\nMIIEvQI...\n-----END PRIVATE KEY-----\n"`
+6. Paste it directly into Vercel (with the quotes)
+7. Save and redeploy
+
+**Solution 2: Use Base64 encoding (Alternative)**
+If Method 1 doesn't work, you can Base64 encode the key:
+1. Get the private key from your JSON file (the value, not including the outer quotes)
+2. Base64 encode it using an online tool or command line
+3. Add to Vercel as `FIREBASE_PRIVATE_KEY_BASE64`
+4. Update the code to decode it (contact developer for this change)
+
 ### Error: "ENOENT: no such file or directory"
 - This means environment variables are not set in Vercel
 - Follow Step 3 above to add all three variables
@@ -102,9 +142,16 @@ For local development, you can continue using the `scripts/serviceAccountKey.jso
 ### Error: "Failed to initialize Firebase Admin"
 - Check that all three environment variables are set correctly
 - Verify the private key includes the BEGIN/END markers
-- Make sure `\n` characters are preserved in the private key
+- Check Vercel deployment logs for the specific error
+- Make sure there are no extra spaces or characters
 
 ### Error: "The default Firebase app does not exist"
 - Firebase Admin failed to initialize
-- Check Vercel build logs for the specific error
-- Verify your Firebase project ID is correct
+- Check Vercel build logs for the specific initialization error
+- Verify your Firebase project ID is correct (should be `invitee-c68f4`)
+
+### Still having issues?
+1. Check the deployment logs in Vercel for the exact error message
+2. Verify all three environment variables are set in the correct environment (Production/Preview/Development)
+3. Try redeploying after setting the variables
+4. Make sure the environment variables don't have any trailing spaces or newlines

@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { LogIn, Loader2, AlertCircle, User, Lock, Shield, Eye, EyeOff } from "lucide-react";
 import { Button, Form, Input, Label, TextField } from "@heroui/react";
 import { showToast } from "./toast";
+import { Loading } from "./loading";
 
 interface LoginFormData {
   admin: string;
@@ -12,8 +14,10 @@ interface LoginFormData {
 }
 
 export const Login = () => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   const {
     control,
@@ -31,6 +35,19 @@ export const Login = () => {
   const password = useWatch({ control, name: "password" });
 
   const isButtonDisabled = isSubmitting || !admin || !password;
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const storedCredential = sessionStorage.getItem('credential');
+
+    if (storedCredential) {
+      // User is already logged in, redirect to dashboard
+      router.push('/dashboard');
+      return;
+    }
+
+    setIsCheckingAuth(false);
+  }, [router]);
 
   const onSubmit = async (data: LoginFormData) => {
     setIsSubmitting(true);
@@ -87,6 +104,13 @@ export const Login = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Show loading state while checking authentication
+  if (isCheckingAuth) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <div className="relative flex items-center justify-center min-h-dvh px-8 bg-background">

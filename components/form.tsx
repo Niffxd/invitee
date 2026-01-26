@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Check, Loader2, UserPlus, AlertCircle, Lock } from "lucide-react";
 import { Button, Form as FormHeroui, Input, Label, TextArea, TextField } from "@heroui/react";
@@ -20,7 +20,9 @@ interface FormData {
 export const Form = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { inviteeId } = useParams();
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const inviteeId = (params?.inviteeId as string) || searchParams?.get('inviteeId');
 
   console.log(inviteeId);
 

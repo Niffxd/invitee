@@ -6,14 +6,20 @@ import {
   Form,
 } from "@/components";
 
-export default function Home() {
+interface PageProps {
+  searchParams: { [key: string]: string | undefined };
+}
+
+export default function Home({ searchParams }: PageProps) {
+  const { inviteeId } = searchParams;
+
   return (
     <>
       <Carousel>
-        <Header />
-        <Schedule />
-        <Details />
-        <Form />
+        <Header inviteeId={inviteeId} />
+        {inviteeId && <Schedule />}
+        {inviteeId && <Details />}
+        {inviteeId && <Form />}
       </Carousel>
     </>
   );

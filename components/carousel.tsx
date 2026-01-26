@@ -1,15 +1,31 @@
 "use client";
 
-import { useEffect, useState, useRef, ReactNode } from "react";
+import { useEffect, useState, useRef, ReactNode, createContext, useContext } from "react";
 import { Wrapper } from "./wrapper";
 
 interface CarouselProps {
   children: ReactNode[];
 }
 
+interface SlideContextValue {
+  isActive: boolean;
+  hasBeenViewed: boolean;
+  visitCount: number;
+}
+
+const SlideContext = createContext<SlideContextValue>({
+  isActive: false,
+  hasBeenViewed: false,
+  visitCount: 0,
+});
+
+export const useSlide = () => useContext(SlideContext);
+
 export const Carousel = ({ children }: CarouselProps) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [viewedSlides, setViewedSlides] = useState<Set<number>>(new Set([0]));
+  const [visitCounts, setVisitCounts] = useState<Record<number, number>>({ 0: 1 });
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -20,6 +36,13 @@ export const Carousel = ({ children }: CarouselProps) => {
     if (pageIndex >= 0 && pageIndex < totalPages && !isTransitioning) {
       setIsTransitioning(true);
       setCurrentPage(pageIndex);
+      // Mark this slide as viewed
+      setViewedSlides(prev => new Set([...prev, pageIndex]));
+      // Increment visit count for this slide
+      setVisitCounts(prev => ({
+        ...prev,
+        [pageIndex]: (prev[pageIndex] || 0) + 1
+      }));
       setTimeout(() => setIsTransitioning(false), 600);
     }
   };
@@ -114,20 +137,28 @@ export const Carousel = ({ children }: CarouselProps) => {
             transform: `translateX(-${currentPage * 100}%)`,
           }}
         >
-          {children?.map((child, index) => (
-            <div
-              key={index}
-              className="min-w-full h-full flex items-center justify-center"
-              style={{
-                opacity: currentPage === index ? 1 : 0.3,
-                transition: "opacity 0.6s ease-in-out",
-              }}
-            >
-              <div className="w-full h-full overflow-y-auto">
-                {child}
+          {children?.map((child, index) => {
+            const isActive = currentPage === index;
+            const hasBeenViewed = viewedSlides.has(index);
+            const visitCount = visitCounts[index] || 0;
+
+            return (
+              <div
+                key={index}
+                className="min-w-full h-full flex items-center justify-center"
+                style={{
+                  opacity: isActive ? 1 : 0.3,
+                  transition: "opacity 0.6s ease-in-out",
+                }}
+              >
+                <SlideContext.Provider value={{ isActive, hasBeenViewed, visitCount }}>
+                  <div key={visitCount} className="w-full h-full overflow-y-auto">
+                    {child}
+                  </div>
+                </SlideContext.Provider>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Page Indicators */}

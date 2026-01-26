@@ -32,7 +32,11 @@ export const Details = () => {
                   {partyNeeds.map((need, index) => (
                     <li
                       key={index}
-                      className="flex items-start gap-3"
+                      className="flex items-start gap-3 animate-slide-in-up opacity-0"
+                      style={{ 
+                        animationDelay: `${0.2 + index * 0.1}s`, 
+                        animationFillMode: "forwards" 
+                      }}
                     >
                       <div className="text-accent mt-0.5">
                         {need.icon}
@@ -53,7 +57,11 @@ export const Details = () => {
                   {partyFeatures.map((feature, index) => (
                     <li
                       key={index}
-                      className="flex items-start gap-3"
+                      className="flex items-start gap-3 animate-slide-in-up opacity-0"
+                      style={{ 
+                        animationDelay: `${0.3 + index * 0.1}s`, 
+                        animationFillMode: "forwards" 
+                      }}
                     >
                       <div className="text-accent mt-0.5">
                         {feature.icon}

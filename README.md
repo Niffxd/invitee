@@ -103,6 +103,10 @@ pnpm build
 pnpm start
 ```
 
+### Deploying to Vercel
+
+See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for detailed instructions on deploying this application to Vercel with Firebase Admin SDK configuration.
+
 ## Firebase Data Structure
 
 ### Collections

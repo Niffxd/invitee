@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { Toast } from "@heroui/react";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { SparklesBackground, GradientBackground } from "@/components";
 import "./globals.css";
-import { Toast } from "@heroui/react";
 
 export const metadata: Metadata = {
   title: "Invitee",
@@ -16,6 +17,7 @@ export default function RootLayout({
   return (
     <html className="dark" data-theme="dark" suppressHydrationWarning>
       <body className="bg-background text-foreground">
+        <SpeedInsights />
         <Toast.Container placement="bottom" />
         <SparklesBackground />
         <GradientBackground />

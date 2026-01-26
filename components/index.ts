@@ -8,4 +8,5 @@ export * from "./schedule";
 export * from "./sparkles";
 export * from "./switch";
 export * from "./scroll-reveal";
+export * from "./toast";
 export * from "./wrapper";

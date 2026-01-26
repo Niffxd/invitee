@@ -1,18 +1,16 @@
 import {
   Carousel,
-  GradientBackground,
-  SparklesBackground,
   Header,
   Schedule,
   Details,
   Form,
 } from "@/components";
+import { Toast } from "@heroui/react";
 
 export default function Home() {
   return (
     <>
-      <SparklesBackground />
-      <GradientBackground />
+      <Toast.Container placement="bottom" />
       <Carousel>
         <Header />
         <Schedule />

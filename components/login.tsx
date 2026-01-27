@@ -52,34 +52,40 @@ export const Login = () => {
 
   const onSubmit = async (data: LoginFormData) => {
     setIsSubmitting(true);
-
     const { admin, password } = data;
 
     try {
-      // Call server-side API route for authentication
       const response = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ admin, password }),
       });
 
-      const result = await response.json();
+      // Try to parse JSON only if content-type looks like JSON
+      const contentType = response.headers.get('content-type') || '';
+      let result = null;
 
-      if (!response.ok || !result.success) {
-        // Login failed
+      if (contentType.includes('application/json')) {
+        result = await response.json();
+      } else {
+        const text = await response.text();
+        console.error('Non-JSON response from /api/auth/login:', {
+          status: response.status,
+          text,
+        });
+        throw new Error(`Non-JSON response: ${response.status}`);
+      }
+
+      if (!response.ok || !result?.success) {
         showToast({
           text: "Invalid credentials",
           variant: "danger",
           icon: <AlertCircle />,
           description: "Username or password is incorrect",
         });
-        setIsSubmitting(false);
         return;
       }
 
-      // Login successful
       showToast({
         text: "Login successful",
         variant: "success",
@@ -87,12 +93,8 @@ export const Login = () => {
         description: "Welcome back",
       });
 
-      // Store credential in sessionStorage or localStorage
       sessionStorage.setItem('credential', JSON.stringify(result.credential));
-
-      // Redirect to dashboard
       window.location.href = '/dashboard';
-
     } catch (error) {
       console.error("Login error:", error);
       showToast({

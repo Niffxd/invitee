@@ -1,8 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/db/admin';
 import { v4 as uuidv4 } from 'uuid';
+import { capitalizeAll } from '@/helpers';
 
 const db = getAdminDb();
+
+export async function GET() {
+  try {
+    const inviteesSnap = await db
+      .collection("invitees")
+      .orderBy("createdAt", "asc")
+      .get();
+
+    const invitees = inviteesSnap.docs.map((doc) => doc.data());
+
+    return NextResponse.json({ invitees });
+  } catch (error) {
+    console.error("Error fetching invitees:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     await inviteeRef.set({
       inviteeId,
-      name: name.trim(),
+      name: capitalizeAll(name),
       isConfirmed: false,
       hasPlusOne: false,
       notes: '',

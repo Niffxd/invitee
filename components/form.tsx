@@ -6,7 +6,7 @@ import { Check, Loader2, UserPlus, AlertCircle, Lock } from "lucide-react";
 import { Button, Form as FormHeroui, Input, Label, TextArea, TextField } from "@heroui/react";
 import { SwitchComponent } from "./switch";
 import { showToast } from "./toast";
-import { updateInvitee } from "@/api";
+import { updateInvitee } from "@/helpers";
 
 interface FormData {
   name: string;

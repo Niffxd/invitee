@@ -28,7 +28,7 @@ export const LoginLink = ({ children, enable = true }: { children: React.ReactNo
 
   return (
     <Link
-      href={enable ? "/" : "/login"}
+      href={enable ? "/login" : "/"}
       aria-label="Go to login"
       onClick={handleClick}
       onTouchStart={handleTouchStart}

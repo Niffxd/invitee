@@ -1,3 +1,6 @@
+"use client";
+
+import { useSearchParams } from 'next/navigation'
 import {
   Carousel,
   Header,
@@ -6,21 +9,27 @@ import {
   Form,
 } from "@/components";
 
-interface PageProps {
-  searchParams: { [key: string]: string | undefined };
-}
+export default function Home() {
+  const searchParams = useSearchParams();
 
-export default function Home({ searchParams }: PageProps) {
-  const { inviteeId } = searchParams;
+  const inviteeId: string | null = searchParams.get('inviteeId');
+
+  if (inviteeId === null) {
+    return (
+      <Carousel>
+        <Header />
+      </Carousel>
+    )
+  }
+
+  console.log("inviteeId", inviteeId);
 
   return (
-    <>
-      <Carousel>
-        <Header inviteeId={inviteeId} />
-        {inviteeId && <Schedule />}
-        {inviteeId && <Details />}
-        {inviteeId && <Form />}
-      </Carousel>
-    </>
+    <Carousel>
+      <Header inviteeId={"inviteeId"} />
+      <Schedule />
+      <Details />
+      <Form />
+    </Carousel>
   );
 };

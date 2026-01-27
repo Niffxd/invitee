@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, ReactNode, createContext, useContext } fro
 import { Wrapper } from "./wrapper";
 
 interface CarouselProps {
-  children: ReactNode[];
+  children: ReactNode[] | ReactNode;
 }
 
 interface SlideContextValue {
@@ -31,7 +31,7 @@ export const Carousel = ({ children }: CarouselProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Filter out falsy children (null, undefined, false)
-  const validChildren = children?.filter(child => child != null && child !== false) ?? [];
+  const validChildren = [children]?.flat()?.filter(child => child != null && child !== false) ?? [];
   const totalPages = validChildren.length;
 
   const goToPage = (pageIndex: number) => {

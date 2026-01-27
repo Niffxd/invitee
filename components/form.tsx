@@ -6,8 +6,7 @@ import { Check, Loader2, UserPlus, AlertCircle, Lock } from "lucide-react";
 import { Button, Form as FormHeroui, Input, Label, TextArea, TextField } from "@heroui/react";
 import { SwitchComponent } from "./switch";
 import { showToast } from "./toast";
-import { getInvitee, updateInvitee } from "@/api";
-import { InviteeProps } from "@/types";
+import { updateInvitee } from "@/api";
 
 interface FormData {
   name: string;
@@ -18,11 +17,8 @@ interface FormData {
   companionName: string;
 }
 
-export const Form = ({ inviteeId }: { inviteeId: string }) => {
-  const [invitee, setInvitee] = useState<InviteeProps | null>(null);
+export const Form = ({ inviteeId, inviteeName }: { inviteeId: string, inviteeName: string | undefined }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const isValidInviteeId = typeof inviteeId === "string" && inviteeId.length > 0;
 
   const {
     control,
@@ -31,7 +27,7 @@ export const Form = ({ inviteeId }: { inviteeId: string }) => {
     setValue,
   } = useForm<FormData>({
     defaultValues: {
-      name: invitee?.name ?? "",
+      name: inviteeName,
       host: "Nicolás Sanchez",
       notes: "",
       isConfirmed: false,
@@ -43,48 +39,6 @@ export const Form = ({ inviteeId }: { inviteeId: string }) => {
 
   const isConfirmed = useWatch({ control, name: "isConfirmed" });
   const hasPlusOne = useWatch({ control, name: "hasPlusOne" });
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const loadInvitee = async () => {
-      if (!isValidInviteeId || !inviteeId) {
-        setInvitee(null);
-        return;
-      }
-
-
-      try {
-        const invitee = await getInvitee(inviteeId);
-        if (!isMounted) return;
-
-        if (!invitee) {
-          setInvitee(null);
-          return;
-        }
-
-        setInvitee(invitee);
-      } catch {
-        if (!isMounted) return;
-        setInvitee(null);
-      } finally {
-        if (!isMounted) return;
-      }
-    };
-
-    loadInvitee();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [inviteeId, isValidInviteeId]);
-
-  // Keep name in sync with fetched invitee name (e.g. refresh / deep link)
-  useEffect(() => {
-    if (invitee) {
-      setValue("name", invitee.name, { shouldValidate: true });
-    }
-  }, [invitee, setValue]);
 
   // Effect to handle isConfirmed state changes
   useEffect(() => {

@@ -15,6 +15,7 @@ interface LoginFormData {
 
 export const Login = () => {
   const router = useRouter();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -276,7 +277,15 @@ export const Login = () => {
             <button
               type="button"
               className="text-accent hover:underline font-medium"
-              onClick={() => console.log("Contact support")}
+              onClick={() => {
+                router.push("/");
+                showToast({
+                  text: "Error: Soporte no disponible",
+                  variant: "danger",
+                  icon: <AlertCircle />,
+                  description: "No se pudo identificar el error",
+                });
+              }}
             >
               Contact support
             </button>

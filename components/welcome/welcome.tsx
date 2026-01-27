@@ -15,7 +15,7 @@ export const Welcome = () => {
 
   const inviteeId: string | null = searchParams.get("inviteeId");
 
-  if (inviteeId !== typeof String) {
+  if (inviteeId === null || typeof inviteeId !== "string") {
     return (
       <Carousel>
         <AlternativeWelcome />
@@ -28,7 +28,7 @@ export const Welcome = () => {
       <Header inviteeId={inviteeId} />
       <Schedule />
       <Details />
-      <Form />
+      <Form inviteeId={inviteeId} />
     </Carousel>
   );
 };

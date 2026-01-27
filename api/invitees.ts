@@ -1,7 +1,7 @@
-import { doc, serverTimestamp, writeBatch, getDoc, collection, getDocs, deleteDoc, query, where } from "firebase/firestore";
+import { doc, serverTimestamp, writeBatch, getDoc, collection, getDocs, deleteDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/db/firebase";
-import { InviteeProps, UpdateInviteeProps, PlusOne } from "@/types";
+import { InviteeProps, UpdateInviteeProps, PlusOneProps } from "@/types";
 
 /**
  * Creates a single invitee via API route (uses Admin SDK)
@@ -137,38 +137,55 @@ export const getInvitees = async (): Promise<InviteeProps[]> => {
  * @returns Promise that resolves when the invitee is deleted
  */
 export const deleteInvitee = async (inviteeId: string): Promise<void> => {
-  const batch = writeBatch(db);
-
-  // Delete the invitee
-  const inviteeRef = doc(db, "invitees", inviteeId);
-  batch.delete(inviteeRef);
-
-  // Delete any associated plus ones
-  const plusOnesRef = collection(db, "plusOnes");
-  const plusOneQuery = query(plusOnesRef, where("inviteeId", "==", inviteeId));
-  const plusOneSnapshot = await getDocs(plusOneQuery);
-
-  plusOneSnapshot.forEach((doc) => {
-    batch.delete(doc.ref);
+  const response = await fetch(`/api/invitees/${inviteeId}`, {
+    method: "DELETE",
   });
 
-  await batch.commit();
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error((error as { error?: string }).error || "Failed to delete invitee");
+  }
 };
 
 /**
  * Retrieves all plus ones from Firestore
  * @returns Promise that resolves to an array of all plus ones
  */
-export const getAllPlusOne = async (): Promise<PlusOne[]> => {
+export const getAllPlusOne = async (): Promise<PlusOneProps[]> => {
   const plusOnesRef = collection(db, "plusOnes");
   const querySnapshot = await getDocs(plusOnesRef);
 
-  const plusOnes: PlusOne[] = [];
+  const plusOnes: PlusOneProps[] = [];
   querySnapshot.forEach((doc) => {
-    plusOnes.push(doc.data() as PlusOne);
+    plusOnes.push(doc.data() as PlusOneProps);
   });
 
   return plusOnes;
+};
+
+/**
+ * Retrieves plus ones for a specific invitee
+ * @param inviteeId - The ID of the invitee whose plus ones should be fetched
+ * @returns Promise that resolves to an array of plus ones for the invitee
+ */
+export const getAllPlusOneById = async (inviteeId: string): Promise<PlusOneProps[]> => {
+  const response = await fetch(`/api/invitees/${inviteeId}/plus-ones`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error((error as { error?: string }).error || "Failed to load plus ones");
+  }
+
+  const data = await response.json();
+  const plusOnes = (data.plusOnes || []) as PlusOneProps[];
+
+  // Deduplicate by plusOneId in case the API returns duplicates
+  const uniquePlusOnes = plusOnes.filter(
+    (plusOne, index, self) =>
+      index === self.findIndex((other) => other.plusOneId === plusOne.plusOneId)
+  );
+
+  return uniquePlusOnes;
 };
 
 /**

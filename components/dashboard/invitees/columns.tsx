@@ -1,10 +1,47 @@
+import Link from "next/link";
 import { type ColumnDef } from "@tanstack/react-table";
-import { UserCheck, UserX, Clock } from "lucide-react";
-import { Timestamp } from "firebase/firestore";
+import { UserCheck, UserSearch, Check, X, Link as LinkIcon } from "lucide-react";
 import { FlexibleInviteeProps } from "./types";
-import { formatDate } from "./utils";
+import { ActionsCell } from "./actions";
+import { productionPath, developmentPath } from "./consts";
 
 export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
+  {
+    accessorKey: "isConfirmed",
+    header: "Status",
+    cell: (info) => {
+      const invitationPath = `${process.env.NODE_ENV === "production"
+        ? productionPath
+        : developmentPath
+        }/?inviteeId=${info.row.original.inviteeId}`;
+
+      const { plusOneId } = info.row.original;
+      const isConfirmed = info.getValue() as boolean;
+      const colorClasses = isConfirmed
+        ? "bg-green-500/10 border-green-500/20 text-green-600"
+        : "bg-yellow-500/10 border-yellow-500/20 text-yellow-600";
+
+
+      if (plusOneId) {
+        return null;
+      }
+
+      return (
+        <div className="flex items-center gap-2">
+          <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border ${colorClasses}`}>
+            {isConfirmed ? (
+              <UserCheck className="w-4 h-4" />
+            ) : (
+              <UserSearch className="w-4 h-4" />
+            )}
+          </div>
+          <Link href={invitationPath} target="_blank" className="w-4 h-4">
+            <LinkIcon className="w-4 h-4" />
+          </Link>
+        </div>
+      );
+    },
+  },
   {
     accessorKey: "name",
     header: "Name",
@@ -17,35 +54,19 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
     ),
   },
   {
-    accessorKey: "isConfirmed",
-    header: "Status",
-    cell: (info) => {
-      const isConfirmed = info.getValue() as boolean;
-      const colorClasses = isConfirmed
-        ? "bg-green-500/10 border-green-500/20 text-green-600"
-        : "bg-yellow-500/10 border-yellow-500/20 text-yellow-600";
-
-      return (
-        <div className="flex items-center gap-2">
-          <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border ${colorClasses}`}>
-            {isConfirmed ? (
-              <UserCheck className="w-4 h-4" />
-            ) : (
-              <UserX className="w-4 h-4" />
-            )}
-          </div>
-        </div>
-      );
-    },
-  },
-  {
     accessorKey: "hasPlusOne",
-    header: "Plus One",
+    header: "+ 1",
     cell: (info) => {
       const hasPlusOne = info.getValue() as boolean;
+      const { plusOneId } = info.row.original;
+
+      if (plusOneId) {
+        return <LinkIcon className="w-4 h-4" />;
+      }
+
       return (
         <span className="text-xs text-muted">
-          {hasPlusOne ? "Yes" : "No"}
+          {hasPlusOne ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
         </span>
       );
     },
@@ -63,19 +84,19 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
     },
   },
   {
-    accessorKey: "createdAt",
-    header: "Created",
-    cell: (info) => {
-      const timestamp = info.getValue() as Timestamp;
-      const formattedDate = formatDate(timestamp);
+    id: "actions",
+    header: "Actions",
+    cell: ({ row, table }) => {
+      if (row.original.rowType === "plusOne" || row.depth > 0) return null;
+      const { inviteeId, name } = row.original
 
+      const meta = table.options.meta as { onInviteeDeleted?: (inviteeId: string) => void } | undefined;
       return (
-        <div className="flex items-center gap-2">
-          <Clock className="w-3.5 h-3.5 text-muted" />
-          <span className="text-xs text-muted">
-            {formattedDate}
-          </span>
-        </div>
+        <ActionsCell
+          inviteeId={inviteeId}
+          name={name}
+          onDeleted={() => meta?.onInviteeDeleted?.(inviteeId)}
+        />
       );
     },
   },

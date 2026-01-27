@@ -1,10 +1,13 @@
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic'; // optional but avoids accidental static optimization
 
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { getAdminDb } from '@/db/admin';
 
 const db = getAdminDb();
+
+const allowedOrigin = process.env.CORS_ORIGIN ?? '*';
 
 export async function POST(request: NextRequest) {
   try {
@@ -67,4 +70,15 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+export async function OPTIONS() {
+  const res = new NextResponse(null, { status: 204 });
+
+  res.headers.set('Access-Control-Allow-Origin', allowedOrigin);
+  res.headers.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.headers.set('Access-Control-Max-Age', '86400');
+
+  return res;
 }

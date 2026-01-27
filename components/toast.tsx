@@ -38,6 +38,7 @@ export const showToast = ({
   const toastOptions: {
     indicator?: ReactNode;
     description?: ReactNode;
+    timeout?: number;
     actionProps?: {
       children: string;
       onPress: () => void;
@@ -52,6 +53,9 @@ export const showToast = ({
   if (description) {
     toastOptions.description = description;
   }
+
+  // Auto-close the toast after 3 seconds
+  toastOptions.timeout = 3000;
 
   if (onPress && actionText) {
     toastOptions.actionProps = {

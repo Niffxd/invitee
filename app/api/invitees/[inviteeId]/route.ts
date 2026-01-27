@@ -4,6 +4,42 @@ import { v4 as uuidv4 } from 'uuid';
 
 const db = getAdminDb();
 
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ inviteeId: string }> }
+) {
+  try {
+    const { inviteeId } = await params;
+
+    if (!inviteeId) {
+      return NextResponse.json(
+        { error: 'Invitee ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const inviteeRef = db.collection('invitees').doc(inviteeId);
+    const inviteeDoc = await inviteeRef.get();
+
+    if (!inviteeDoc.exists) {
+      return NextResponse.json(
+        { error: 'Invitee not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      invitee: inviteeDoc.data(),
+    });
+  } catch (error) {
+    console.error('Error fetching invitee:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ inviteeId: string }> }

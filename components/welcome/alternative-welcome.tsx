@@ -1,11 +1,12 @@
-import { AlertCircle, PartyPopper } from "lucide-react";
-import { LoginLink } from "./login-link";
+import { AlertCircle, ArrowBigDown, CakeSlice, PartyPopper } from "lucide-react";
+import { LoginLink } from "../login-link";
+import { InvitationLink } from "./invitation-link";
 
-export const Header = ({ inviteeId }: { inviteeId?: string | null }) => {
+export const AlternativeWelcome = () => {
   return (
     <div className="text-center relative py-12">
       {/* Icon with enhanced animations */}
-      <LoginLink enable={inviteeId !== null}>
+      <LoginLink enable={false}>
         <div
           className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-br from-primary/40 via-primary/30 to-primary/20 mb-6 relative shadow-lg animate-scale-in"
           style={{ animationDelay: "0.1s", animationFillMode: "both" }}
@@ -13,19 +14,9 @@ export const Header = ({ inviteeId }: { inviteeId?: string | null }) => {
           <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping-slow" />
           <div className="absolute inset-0 rounded-full bg-primary/5 animate-pulse-slow" />
           <div className="absolute inset-2 rounded-full bg-white/80 dark:bg-background/80" />
-          <PartyPopper className="w-12 h-12 text-primary relative z-50 animate-bounce-gentle transition-transform" />
+          <PartyPopper className="w-12 h-12 text-primary relative z-50" />
         </div>
       </LoginLink>
-
-      {/* Invitation text with slide-up animation */}
-      <p
-        className="text-primary uppercase tracking-[0.3em] text-sm font-medium mb-4 animate-slide-in-up"
-        style={{ animationDelay: "0.2s", animationFillMode: "both" }}
-      >
-        <span className="inline-block animate-shimmer bg-linear-to-r from-primary via-primary/80 to-primary bg-size-[200%_100%] bg-clip-text">
-          Estás invitado/a
-        </span>
-      </p>
 
       {/* Main title with enhanced gradient and animation */}
       <h1
@@ -42,7 +33,7 @@ export const Header = ({ inviteeId }: { inviteeId?: string | null }) => {
         className="px-12 text-lg text-muted-foreground max-w-md mx-auto leading-relaxed animate-fade-in"
         style={{ animationDelay: "0.4s", animationFillMode: "both" }}
       >
-        Te invitamos a celebrar con nosotros un día lleno de música, alegría y buenos momentos.
+        Para poder participar, es necesario solicitar tu invitación.
       </p>
 
       {/* Decorative line with animation */}
@@ -59,10 +50,30 @@ export const Header = ({ inviteeId }: { inviteeId?: string | null }) => {
           <div className="flex items-center gap-2">
             <AlertCircle className="h-4 w-4 text-yellow-500 shrink-0" />
             <span className="text-xs sm:text-sm text-yellow-500">
-              <strong className="font-semibold text-yellow-500"></strong> Esta invitación es única para cada persona
+              <strong className="font-semibold text-yellow-500"></strong>
+              Cada solicitud será confirmada de forma individual.
             </span>
           </div>
         </div>
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        <div
+          className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-br from-primary/40 via-primary/30 to-primary/20 relative shadow-lg animate-scale-in"
+          style={{ animationDelay: "0.1s", animationFillMode: "both" }}
+        >
+          <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping-slow" />
+          <div className="absolute inset-0 rounded-full bg-primary/5 animate-pulse-slow" />
+          <ArrowBigDown className="w-12 h-12 text-primary relative z-50 animate-bounce-gentle transition-transform" />
+        </div>
+        <InvitationLink>
+          <div
+            className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-br from-primary/40 via-primary/30 to-primary/20 relative shadow-lg animate-scale-in"
+            style={{ animationDelay: "0.1s", animationFillMode: "both" }}
+          >
+            <div className="absolute inset-2 rounded-full bg-warning" />
+            <CakeSlice className="w-12 h-12 text-primary relative z-50" color="black" />
+          </div>
+        </InvitationLink>
       </div>
     </div>
   );

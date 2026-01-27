@@ -9,10 +9,12 @@ export * from "./loading";
 export * from "./login";
 export * from "./login-link";
 export * from "./schedule";
+export * from "./scroll-reveal";
+export * from "./select";
 export * from "./sparkles";
 export * from "./switch";
-export * from "./scroll-reveal";
 export * from "./table";
 export * from "./toast";
+export * from "./welcome";
 export * from "./wrapper";
-export * from "./select";
+

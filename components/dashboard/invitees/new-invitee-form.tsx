@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Check, Loader2, UserPlus, AlertCircle, User } from "lucide-react";
 import { Button, Form as FormHeroui, Input, Label, TextArea } from "@heroui/react";
-import { createInvitee, updateInvitee } from "@/api";
+import { createInvitee, updateInvitee } from "@/db";
 import { SwitchComponent, showToast, Loading } from "@/components";
 import { CredentialProps } from "@/types";
 

@@ -5,8 +5,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { getAdminDb } from '@/db/admin';
 
-const db = getAdminDb();
-
 const allowedOrigin = process.env.CORS_ORIGIN ?? '*';
 
 export async function POST(request: NextRequest) {
@@ -19,6 +17,10 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Lazy-init: avoid module-load failure in prod if Firebase env vars are missing.
+    // Otherwise the route fails to load → OPTIONS 405 → preflight fails → login appears broken.
+    const db = getAdminDb();
 
     // Query Firestore for the credential - try both 'admin' and 'username' fields
     const credentialsRef = db.collection('credentials');

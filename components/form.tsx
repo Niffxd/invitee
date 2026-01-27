@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useSearchParams } from 'next/navigation'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Check, Loader2, UserPlus, AlertCircle, Lock } from "lucide-react";
 import { Button, Form as FormHeroui, Input, Label, TextArea, TextField } from "@heroui/react";
 import { SwitchComponent } from "./switch";
 import { showToast } from "./toast";
-import { updateInvitee } from "@/api/invitees";
+import { getInvitee, updateInvitee } from "@/api";
+import { InviteeProps } from "@/types";
 
 interface FormData {
   name: string;
@@ -18,12 +18,11 @@ interface FormData {
   companionName: string;
 }
 
-export const Form = () => {
+export const Form = ({ inviteeId }: { inviteeId: string }) => {
+  const [invitee, setInvitee] = useState<InviteeProps | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const params = useParams();
-  const searchParams = useSearchParams();
-  const inviteeId = (params?.inviteeId as string) || searchParams?.get('inviteeId');
+  const isValidInviteeId = typeof inviteeId === "string" && inviteeId.length > 0;
 
   const {
     control,
@@ -32,7 +31,7 @@ export const Form = () => {
     setValue,
   } = useForm<FormData>({
     defaultValues: {
-      name: inviteeId as string,
+      name: invitee?.name ?? "",
       host: "Nicolás Sanchez",
       notes: "",
       isConfirmed: false,
@@ -44,6 +43,48 @@ export const Form = () => {
 
   const isConfirmed = useWatch({ control, name: "isConfirmed" });
   const hasPlusOne = useWatch({ control, name: "hasPlusOne" });
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadInvitee = async () => {
+      if (!isValidInviteeId || !inviteeId) {
+        setInvitee(null);
+        return;
+      }
+
+
+      try {
+        const invitee = await getInvitee(inviteeId);
+        if (!isMounted) return;
+
+        if (!invitee) {
+          setInvitee(null);
+          return;
+        }
+
+        setInvitee(invitee);
+      } catch {
+        if (!isMounted) return;
+        setInvitee(null);
+      } finally {
+        if (!isMounted) return;
+      }
+    };
+
+    loadInvitee();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [inviteeId, isValidInviteeId]);
+
+  // Keep name in sync with fetched invitee name (e.g. refresh / deep link)
+  useEffect(() => {
+    if (invitee) {
+      setValue("name", invitee.name, { shouldValidate: true });
+    }
+  }, [invitee, setValue]);
 
   // Effect to handle isConfirmed state changes
   useEffect(() => {

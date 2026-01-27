@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
-export interface PlusOne {
+export interface PlusOneProps {
   plusOneId: string;
   inviteeId: string;
   name: string;

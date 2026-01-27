@@ -1,6 +1,14 @@
 import { flexRender, Table as ReactTable } from "@tanstack/react-table";
+import { Loading } from "./loading";
 
 export const Table = <T,>({ table }: { table: ReactTable<T> }) => {
+  const meta = table.options.meta as
+    | {
+      onRowClick?: (row: unknown) => void;
+      isLoading?: boolean;
+    }
+    | undefined;
+
   return (
     <table className="w-full">
       <thead>
@@ -23,18 +31,33 @@ export const Table = <T,>({ table }: { table: ReactTable<T> }) => {
         ))}
       </thead>
       <tbody className="divide-y divide-border">
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id} className="hover:bg-default/20 transition-colors">
-            {row.getVisibleCells().map((cell) => (
-              <td key={cell.id} className="px-4 py-3">
-                {flexRender(
-                  cell.column.columnDef.cell,
-                  cell.getContext()
-                )}
-              </td>
-            ))}
+        {table.getRowModel().rows.length === 0 ? (
+          <tr>
+            <td
+              colSpan={table.getAllLeafColumns().length}
+              className="px-4 py-6 text-center text-sm text-muted-foreground"
+            >
+              <Loading />
+            </td>
           </tr>
-        ))}
+        ) : (
+          table.getRowModel().rows.map((row) => (
+            <tr
+              key={row.id}
+              className="hover:bg-default/20 transition-colors"
+              onClick={() => meta?.onRowClick?.(row)}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  className="px-3 py-3"
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );

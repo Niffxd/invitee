@@ -105,3 +105,55 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ inviteeId: string }> }
+) {
+  try {
+    const { inviteeId } = await params;
+
+    if (!inviteeId) {
+      return NextResponse.json(
+        { error: 'Invitee ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const inviteeRef = db.collection('invitees').doc(inviteeId);
+    const inviteeDoc = await inviteeRef.get();
+
+    if (!inviteeDoc.exists) {
+      return NextResponse.json(
+        { error: 'Invitee not found' },
+        { status: 404 }
+      );
+    }
+
+    // Delete invitee and any associated plus ones in a single batch.
+    const batch = db.batch();
+    batch.delete(inviteeRef);
+
+    const plusOnesSnap = await db
+      .collection('plusOnes')
+      .where('inviteeId', '==', inviteeId)
+      .get();
+
+    plusOnesSnap.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+
+    return NextResponse.json({
+      success: true,
+      inviteeId,
+    });
+  } catch (error) {
+    console.error('Error deleting invitee:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}

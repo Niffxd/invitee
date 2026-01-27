@@ -10,4 +10,11 @@ export type SerializedInviteeProps = Omit<InviteeProps, "createdAt" | "updatedAt
 export type FlexibleInviteeProps = Omit<InviteeProps, "createdAt" | "updatedAt"> & {
   createdAt: InviteeProps["createdAt"] | string;
   updatedAt: InviteeProps["updatedAt"] | string;
+  /**
+   * Nested rows rendered when an invitee is expanded.
+   * We model plus-ones as "invitee-like" rows so TanStack's sub-row typing works.
+   */
+  children?: FlexibleInviteeProps[] | undefined;
+  rowType?: "invitee" | "plusOne";
+  plusOneId?: string;
 };

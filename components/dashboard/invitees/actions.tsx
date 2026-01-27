@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { deleteInvitee } from "@/api";
+import { deleteInvitee } from "@/db";
 import { showToast } from "@/components/toast";
 import { AlertCircle, Check, Pencil, Trash2, Ellipsis } from "lucide-react";
 

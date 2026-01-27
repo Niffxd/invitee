@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { getAdminDb } from '@/db/admin';
@@ -17,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     // Query Firestore for the credential - try both 'admin' and 'username' fields
     const credentialsRef = db.collection('credentials');
-    
+
     // First try with 'admin' field
     let snapshot = await credentialsRef
       .where('admin', '==', username)
@@ -38,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     const userData = snapshot.docs[0].data();
-    
+
     // Verify password
     const isValid = await bcrypt.compare(password, userData.password);
 

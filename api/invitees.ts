@@ -1,28 +1,29 @@
-import { doc, serverTimestamp, writeBatch, updateDoc, getDoc, setDoc, Timestamp, collection, getDocs, deleteDoc, query, where } from "firebase/firestore";
+import { doc, serverTimestamp, writeBatch, getDoc, collection, getDocs, deleteDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/db/firebase";
-import { InviteeProps, UpdateInviteeProps, PlusOne } from "@/types";
+import { InviteeProps, UpdateInviteeProps, PlusOneProps } from "@/types";
 
 /**
- * Creates a single invitee in Firestore
+ * Creates a single invitee via API route (uses Admin SDK)
  * @param name - The name of the invitee
  * @returns Promise that resolves with the created invitee ID
  */
 export const createInvitee = async (name: string): Promise<string> => {
-  const inviteeId = uuidv4();
-  const inviteeRef = doc(db, "invitees", inviteeId);
-
-  await setDoc(inviteeRef, {
-    inviteeId,
-    name,
-    isConfirmed: false,
-    hasPlusOne: false,
-    notes: "",
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp()
+  const response = await fetch("/api/invitees", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name }),
   });
 
-  return inviteeId;
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to create invitee");
+  }
+
+  const data = await response.json();
+  return data.inviteeId;
 };
 
 /**
@@ -55,7 +56,7 @@ export const createInvitees = async (names: string[]): Promise<string[]> => {
 };
 
 /**
- * Updates an existing invitee's confirmation status and other fields
+ * Updates an existing invitee's confirmation status and other fields via API route (uses Admin SDK)
  * @param inviteeId - The ID of the invitee to update
  * @param data - The fields to update (isConfirmed, hasPlusOne, notes)
  * @param hasPlusOne - Whether the invitee is bringing a plus one
@@ -68,29 +69,21 @@ export const updateInvitee = async (
   hasPlusOne: boolean,
   plusOneName?: string
 ): Promise<void> => {
-  const inviteeRef = doc(db, "invitees", inviteeId);
+  const response = await fetch(`/api/invitees/${inviteeId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ...data,
+      hasPlusOne,
+      plusOneName: hasPlusOne ? plusOneName : undefined,
+    }),
+  });
 
-  const updateData: Record<string, unknown> = {
-    ...data,
-    updatedAt: serverTimestamp()
-  };
-
-  await updateDoc(inviteeRef, updateData);
-
-  // If the invitee has a plus one and a name is provided, create the plus one document
-  if (hasPlusOne && plusOneName) {
-    const plusOneId = uuidv4();
-    const plusOneRef = doc(db, "plusOnes", plusOneId);
-
-    const plusOneData: PlusOne = {
-      plusOneId,
-      inviteeId,
-      name: plusOneName,
-      createdAt: serverTimestamp() as Timestamp,
-      updatedAt: serverTimestamp() as Timestamp
-    };
-
-    await setDoc(plusOneRef, plusOneData);
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || "Failed to update invitee");
   }
 };
 
@@ -116,15 +109,26 @@ export const getInvitee = async (inviteeId: string): Promise<InviteeProps | null
  * @returns Promise that resolves to an array of all invitees
  */
 export const getInvitees = async (): Promise<InviteeProps[]> => {
-  const inviteesRef = collection(db, "invitees");
-  const querySnapshot = await getDocs(inviteesRef);
+  try {
+    const inviteesRef = collection(db, "invitees");
+    const querySnapshot = await getDocs(inviteesRef);
 
-  const invitees: InviteeProps[] = [];
-  querySnapshot.forEach((doc) => {
-    invitees.push(doc.data() as InviteeProps);
-  });
+    const invitees: InviteeProps[] = [];
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      // Ensure inviteeId is present (use doc.id as fallback)
+      const invitee: InviteeProps = {
+        ...data,
+        inviteeId: data.inviteeId || doc.id,
+      } as InviteeProps;
+      invitees.push(invitee);
+    });
 
-  return invitees;
+    return invitees;
+  } catch (error) {
+    console.error("Error fetching invitees:", error);
+    throw error;
+  }
 };
 
 /**
@@ -133,38 +137,55 @@ export const getInvitees = async (): Promise<InviteeProps[]> => {
  * @returns Promise that resolves when the invitee is deleted
  */
 export const deleteInvitee = async (inviteeId: string): Promise<void> => {
-  const batch = writeBatch(db);
-
-  // Delete the invitee
-  const inviteeRef = doc(db, "invitees", inviteeId);
-  batch.delete(inviteeRef);
-
-  // Delete any associated plus ones
-  const plusOnesRef = collection(db, "plusOnes");
-  const plusOneQuery = query(plusOnesRef, where("inviteeId", "==", inviteeId));
-  const plusOneSnapshot = await getDocs(plusOneQuery);
-
-  plusOneSnapshot.forEach((doc) => {
-    batch.delete(doc.ref);
+  const response = await fetch(`/api/invitees/${inviteeId}`, {
+    method: "DELETE",
   });
 
-  await batch.commit();
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error((error as { error?: string }).error || "Failed to delete invitee");
+  }
 };
 
 /**
  * Retrieves all plus ones from Firestore
  * @returns Promise that resolves to an array of all plus ones
  */
-export const getAllPlusOne = async (): Promise<PlusOne[]> => {
+export const getAllPlusOne = async (): Promise<PlusOneProps[]> => {
   const plusOnesRef = collection(db, "plusOnes");
   const querySnapshot = await getDocs(plusOnesRef);
 
-  const plusOnes: PlusOne[] = [];
+  const plusOnes: PlusOneProps[] = [];
   querySnapshot.forEach((doc) => {
-    plusOnes.push(doc.data() as PlusOne);
+    plusOnes.push(doc.data() as PlusOneProps);
   });
 
   return plusOnes;
+};
+
+/**
+ * Retrieves plus ones for a specific invitee
+ * @param inviteeId - The ID of the invitee whose plus ones should be fetched
+ * @returns Promise that resolves to an array of plus ones for the invitee
+ */
+export const getAllPlusOneById = async (inviteeId: string): Promise<PlusOneProps[]> => {
+  const response = await fetch(`/api/invitees/${inviteeId}/plus-ones`);
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error((error as { error?: string }).error || "Failed to load plus ones");
+  }
+
+  const data = await response.json();
+  const plusOnes = (data.plusOnes || []) as PlusOneProps[];
+
+  // Deduplicate by plusOneId in case the API returns duplicates
+  const uniquePlusOnes = plusOnes.filter(
+    (plusOne, index, self) =>
+      index === self.findIndex((other) => other.plusOneId === plusOne.plusOneId)
+  );
+
+  return uniquePlusOnes;
 };
 
 /**

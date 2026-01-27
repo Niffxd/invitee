@@ -1,20 +1,12 @@
-import {
-  Carousel,
-  Header,
-  Schedule,
-  Details,
-  Form,
-} from "@/components";
+import { Suspense } from "react";
+import { Wrapper, Welcome, Loading } from "@/components";
 
 export default function Home() {
   return (
-    <>
-      <Carousel>
-        <Header />
-        <Schedule />
-        <Details />
-        <Form />
-      </Carousel>
-    </>
-  );
+    <Suspense fallback={<Loading />}>
+      <Wrapper>
+        <Welcome />
+      </Wrapper>
+    </Suspense>
+  )
 };

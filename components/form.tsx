@@ -1,28 +1,28 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from 'next/navigation'
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { Check, Loader2, UserPlus, AlertCircle, Lock } from "lucide-react";
 import { Button, Form as FormHeroui, Input, Label, TextArea, TextField } from "@heroui/react";
 import { SwitchComponent } from "./switch";
 import { showToast } from "./toast";
+import { getInvitee, updateInvitee } from "@/api";
+import { InviteeProps } from "@/types";
 
 interface FormData {
   name: string;
   host: string;
   notes: string;
-  willAttend: boolean;
-  bringCompanion: boolean;
+  isConfirmed: boolean;
+  hasPlusOne: boolean;
   companionName: string;
 }
 
-export const Form = () => {
+export const Form = ({ inviteeId }: { inviteeId: string }) => {
+  const [invitee, setInvitee] = useState<InviteeProps | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { inviteeId } = useParams();
-
-  console.log(inviteeId);
+  const isValidInviteeId = typeof inviteeId === "string" && inviteeId.length > 0;
 
   const {
     control,
@@ -31,43 +31,113 @@ export const Form = () => {
     setValue,
   } = useForm<FormData>({
     defaultValues: {
-      name: inviteeId as string,
+      name: invitee?.name ?? "",
       host: "Nicolás Sanchez",
       notes: "",
-      willAttend: false,
-      bringCompanion: false,
+      isConfirmed: false,
+      hasPlusOne: false,
       companionName: "",
     },
     mode: "onBlur",
   });
 
-  const willAttend = useWatch({ control, name: "willAttend" });
-  const bringCompanion = useWatch({ control, name: "bringCompanion" });
+  const isConfirmed = useWatch({ control, name: "isConfirmed" });
+  const hasPlusOne = useWatch({ control, name: "hasPlusOne" });
 
-  // Effect to handle willAttend state changes
   useEffect(() => {
-    if (!willAttend) {
-      setValue("bringCompanion", false);
+    let isMounted = true;
+
+    const loadInvitee = async () => {
+      if (!isValidInviteeId || !inviteeId) {
+        setInvitee(null);
+        return;
+      }
+
+
+      try {
+        const invitee = await getInvitee(inviteeId);
+        if (!isMounted) return;
+
+        if (!invitee) {
+          setInvitee(null);
+          return;
+        }
+
+        setInvitee(invitee);
+      } catch {
+        if (!isMounted) return;
+        setInvitee(null);
+      } finally {
+        if (!isMounted) return;
+      }
+    };
+
+    loadInvitee();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [inviteeId, isValidInviteeId]);
+
+  // Keep name in sync with fetched invitee name (e.g. refresh / deep link)
+  useEffect(() => {
+    if (invitee) {
+      setValue("name", invitee.name, { shouldValidate: true });
+    }
+  }, [invitee, setValue]);
+
+  // Effect to handle isConfirmed state changes
+  useEffect(() => {
+    if (!isConfirmed) {
+      setValue("hasPlusOne", false);
       setValue("companionName", "");
     }
-  }, [willAttend, setValue]);
+  }, [isConfirmed, setValue]);
 
   const onSubmit = async (data: FormData) => {
+    if (!inviteeId) {
+      showToast({
+        text: "Error: ID de invitado no encontrado",
+        variant: "danger",
+        icon: <AlertCircle />,
+        description: "No se pudo identificar el invitado",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      await updateInvitee(
+        inviteeId,
+        {
+          isConfirmed: data.isConfirmed,
+          hasPlusOne: data.hasPlusOne,
+          notes: data.notes || "",
+        },
+        data.hasPlusOne,
+        data.hasPlusOne ? data.companionName : undefined
+      );
 
-    console.log("Form submitted:", data);
-    setIsSubmitting(false);
-
-    // Show success toast
-    showToast({
-      text: "¡Tu asistencia ha sido confirmada exitosamente!",
-      variant: "success",
-      icon: <Check />,
-      description: "Gracias por confirmar tu asistencia",
-    });
+      // Show success toast
+      showToast({
+        text: "¡Tu asistencia ha sido confirmada exitosamente!",
+        variant: "success",
+        icon: <Check />,
+        description: "Gracias por confirmar tu asistencia",
+      });
+    } catch (error) {
+      const inviteeNotFound = error instanceof Error && error.message === "Invitee not found"
+      // Show error toast
+      showToast({
+        text: "Error al confirmar asistencia",
+        variant: "danger",
+        icon: <AlertCircle />,
+        description: inviteeNotFound ? "Invitado no se encuentra en la lista" : "Ocurrió un error inesperado",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -223,13 +293,13 @@ export const Form = () => {
                 >
                   <div className="space-y-4 rounded-xl bg-linear-to-br from-accent/5 to-primary/5 p-4 border border-accent/10 transition-all duration-500">
                     <Controller
-                      name="willAttend"
+                      name="isConfirmed"
                       control={control}
                       render={({ field: { onChange, value } }) => (
                         <div className="transform transition-all duration-300">
                           <SwitchComponent
                             label="¿Confirmar asistencia?"
-                            name="willAttend"
+                            name="isConfirmed"
                             value={value}
                             onChange={onChange}
                           />
@@ -238,19 +308,19 @@ export const Form = () => {
                     />
 
                     {/* Conditional Companion Section with Smooth Animation */}
-                    {willAttend && (
+                    {isConfirmed && (
                       <div className="space-y-4 overflow-hidden animate-slide-in-down">
                         {/* Divider */}
                         <div className="h-px bg-linear-to-r from-transparent via-border to-transparent" />
 
                         <Controller
-                          name="bringCompanion"
+                          name="hasPlusOne"
                           control={control}
                           render={({ field: { onChange, value } }) => (
                             <div className="transform transition-all duration-300">
                               <SwitchComponent
                                 label="¿Traerás acompañante?"
-                                name="bringCompanion"
+                                name="hasPlusOne"
                                 value={value}
                                 onChange={onChange}
                               />
@@ -259,13 +329,13 @@ export const Form = () => {
                         />
 
                         {/* Companion Name Field with Enhanced Styling */}
-                        {bringCompanion && (
+                        {hasPlusOne && (
                           <div className="animate-slide-in-down pt-2">
                             <Controller
                               name="companionName"
                               control={control}
                               rules={{
-                                required: bringCompanion ? "El nombre del acompañante es requerido" : false,
+                                required: hasPlusOne ? "El nombre del acompañante es requerido" : false,
                                 minLength: {
                                   value: 2,
                                   message: "El nombre debe tener al menos 2 caracteres",
@@ -315,11 +385,11 @@ export const Form = () => {
                 >
                   <Button
                     type="submit"
-                    isDisabled={isSubmitting || !willAttend}
+                    isDisabled={isSubmitting || !isConfirmed}
                     className={`
                       group relative flex-1 overflow-hidden transition-all duration-500
                       active:scale-[0.98]
-                      ${!willAttend ? 'opacity-50' : 'opacity-100'}
+                      ${!isConfirmed ? 'opacity-50' : 'opacity-100'}
                     `}
                   >
                     {/* Button Content */}

@@ -1,5 +1,5 @@
 import { AlertCircle } from "lucide-react";
-import { getInvitees } from "@/db/invitees";
+import { getInvitees } from "@/helpers/invitees";
 import { showToast } from "@/components";
 import { InviteeStats } from "./types";
 

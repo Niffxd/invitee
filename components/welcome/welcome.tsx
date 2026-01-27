@@ -11,7 +11,7 @@ import {
   AlternativeWelcome,
 } from "@/components";
 import { InviteeProps } from "@/types";
-import { getInvitee } from "@/db";
+import { getInvitee } from "@/helpers";
 
 export const Welcome = () => {
   const searchParams = useSearchParams();

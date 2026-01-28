@@ -42,7 +42,6 @@ export const Invitees = () => {
         inviteeId: p.inviteeId,
         name: p.name,
         isConfirmed: false,
-        isDeclined: false,
         hasPlusOne: false,
         notes: "",
         createdAt: p.createdAt,
@@ -124,7 +123,7 @@ export const Invitees = () => {
           updatedAt: invitee.updatedAt?.toDate?.()?.toISOString() || new Date().toISOString(),
           children: [],
           rowType: "invitee",
-        })).toSorted((a, b) => a.name.localeCompare(b.name));
+        }));
         setInvitees(serializedInvitees);
       } catch (error) {
         console.error("Failed to fetch invitees:", error);

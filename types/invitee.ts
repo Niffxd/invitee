@@ -2,7 +2,6 @@ import { Timestamp } from "firebase/firestore";
 
 export interface UpdateInviteeProps {
   isConfirmed: boolean;
-  isDeclined: boolean;
   hasPlusOne: boolean;
   notes: string;
 }

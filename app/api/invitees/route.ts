@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
       inviteeId,
       name: capitalizeAll(name),
       isConfirmed: false,
-      isDeclined: false,
       hasPlusOne: false,
       notes: '',
       createdAt: new Date(),

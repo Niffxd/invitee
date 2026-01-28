@@ -15,7 +15,7 @@ export const getInviteeStats = async (): Promise<InviteeStats[]> => {
     const total = invitees.length + plusOnes.length;
     const declined = invitees.filter((invitee) => invitee.isDeclined).length
     const confirmed = invitees.filter((invitee) => invitee.isConfirmed).length + plusOnes.length;
-    const pending = total - confirmed;
+    const pending = total - confirmed - declined;
 
     return [
       {

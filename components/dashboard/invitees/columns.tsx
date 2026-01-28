@@ -3,17 +3,13 @@ import { UserCheck, UserSearch, Check, X, Link as LinkIcon, CornerDownRight } fr
 import { CopyButton } from "@/components";
 import { FlexibleInviteeProps } from "./types";
 import { ActionsCell } from "./actions";
-import { productionPath, developmentPath } from "./consts";
+import { invitationPath, invitationText } from "./consts";
 
 export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
   {
     accessorKey: "isConfirmed",
     header: "Status",
     cell: (info) => {
-      const invitationPath = `${process.env.NODE_ENV === "production"
-        ? productionPath
-        : developmentPath
-        }/?inviteeId=${info.row.original.inviteeId}`;
 
       const { plusOneId } = info.row.original;
       const isConfirmed = info.getValue() as boolean;
@@ -38,7 +34,7 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
               <UserSearch className="w-4 h-4" />
             )}
           </div>
-          <CopyButton text={invitationPath} className="w-4 h-4">
+          <CopyButton text={invitationPath.concat(info.row.original.inviteeId)} previousText={invitationText} className="w-4 h-4">
             <LinkIcon className="w-4 h-4" />
           </CopyButton>
         </div>

@@ -4,13 +4,23 @@ import { useState } from "react";
 import { Check, Files, X } from "lucide-react";
 import { showToast } from "./toast";
 
-export const CopyButton = ({ children, text, className }: { children: React.ReactNode, text: string, className: string }) => {
+export const CopyButton = ({
+  children,
+  text,
+  className,
+  previousText,
+}: {
+  children: React.ReactNode;
+  text: string;
+  className: string;
+  previousText?: string;
+}) => {
   const [isCopying, setIsCopying] = useState<boolean>(false);
 
   const handleCopy = async () => {
     try {
       setIsCopying(true);
-      await navigator.clipboard.writeText(text)
+      await navigator.clipboard.writeText(previousText ? previousText.concat(text) : text);
 
       showToast({
         text: "¡Enlace copiado!",

@@ -79,7 +79,6 @@ export const NewInviteeForm = () => {
           inviteeId,
           {
             isConfirmed: false,
-            isDeclined: false,
             hasPlusOne: data.hasPlusOne,
             notes: data.notes || "",
           },

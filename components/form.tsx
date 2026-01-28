@@ -2,18 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { useForm, Controller, useWatch } from "react-hook-form";
-import { Check, Loader2, UserPlus, AlertCircle, Lock, Send, Frown } from "lucide-react";
+import { Check, Loader2, UserPlus, AlertCircle, Lock } from "lucide-react";
 import { Button, Form as FormHeroui, Input, Label, TextArea, TextField } from "@heroui/react";
-import { updateInvitee } from "@/helpers";
 import { SwitchComponent } from "./switch";
-import { RadioButton } from "./radio-button";
 import { showToast } from "./toast";
+import { updateInvitee } from "@/helpers";
 
 interface FormData {
   name: string;
   host: string;
   notes: string;
-  answerSelected: string;
+  isConfirmed: boolean;
   hasPlusOne: boolean;
   companionName: string;
 }
@@ -31,34 +30,23 @@ export const Form = ({ inviteeId, inviteeName }: { inviteeId: string, inviteeNam
       name: inviteeName,
       host: "Nicolás Sanchez",
       notes: "",
-      answerSelected: "",
+      isConfirmed: false,
       hasPlusOne: false,
       companionName: "",
     },
     mode: "onBlur",
   });
 
-  const answerSelected = useWatch({ control, name: "answerSelected" });
+  const isConfirmed = useWatch({ control, name: "isConfirmed" });
   const hasPlusOne = useWatch({ control, name: "hasPlusOne" });
-
-  const radioOptions = [
-    {
-      value: "isConfirmed",
-      label: "Asistiré",
-    },
-    {
-      value: "isDeclined",
-      label: "No asistiré",
-    }
-  ];
 
   // Effect to handle isConfirmed state changes
   useEffect(() => {
-    if (answerSelected !== "isConfirmed") {
+    if (!isConfirmed) {
       setValue("hasPlusOne", false);
       setValue("companionName", "");
     }
-  }, [answerSelected, setValue]);
+  }, [isConfirmed, setValue]);
 
   const onSubmit = async (data: FormData) => {
     if (!inviteeId) {
@@ -74,14 +62,10 @@ export const Form = ({ inviteeId, inviteeName }: { inviteeId: string, inviteeNam
     setIsSubmitting(true);
 
     try {
-      const isConfirmedSelected = data.answerSelected === "isConfirmed";
-      const isDeclinedSelected = data.answerSelected === "isDeclined";
-
       await updateInvitee(
         inviteeId,
         {
-          isConfirmed: isConfirmedSelected,
-          isDeclined: isDeclinedSelected,
+          isConfirmed: data.isConfirmed,
           hasPlusOne: data.hasPlusOne,
           notes: data.notes || "",
         },
@@ -90,23 +74,12 @@ export const Form = ({ inviteeId, inviteeName }: { inviteeId: string, inviteeNam
       );
 
       // Show success toast
-      if (isConfirmedSelected) {
-        showToast({
-          text: "¡Tu asistencia ha sido confirmada exitosamente!",
-          variant: "success",
-          icon: <Check />,
-          description: "Gracias por confirmar tu asistencia",
-        });
-      }
-
-      if (isDeclinedSelected) {
-        showToast({
-          text: "¡Lamentamos que no puedas asistir!",
-          variant: "accent",
-          icon: <Frown />,
-          description: "Podes cambiar de opinión ingresando nuevamente al enlace",
-        });
-      }
+      showToast({
+        text: "¡Tu asistencia ha sido confirmada exitosamente!",
+        variant: "success",
+        icon: <Check />,
+        description: "Gracias por confirmar tu asistencia",
+      });
     } catch (error) {
       const inviteeNotFound = error instanceof Error && error.message === "Invitee not found"
       // Show error toast
@@ -122,7 +95,7 @@ export const Form = ({ inviteeId, inviteeName }: { inviteeId: string, inviteeNam
   };
 
   return (
-    <div className="relative p-8 z-20">
+    <div className="relative p-8">
       <div className="relative max-w-3xl mx-auto">
         {/* Animated Form Container with Hover Glow Effect */}
         <div
@@ -274,21 +247,22 @@ export const Form = ({ inviteeId, inviteeName }: { inviteeId: string, inviteeNam
                 >
                   <div className="space-y-4 rounded-xl bg-linear-to-br from-accent/5 to-primary/5 p-4 border border-accent/10 transition-all duration-500">
                     <Controller
-                      name="answerSelected"
+                      name="isConfirmed"
                       control={control}
                       render={({ field: { onChange, value } }) => (
                         <div className="transform transition-all duration-300">
-                          <RadioButton
-                            name={answerSelected}
-                            options={radioOptions}
-                            value={value as string}
+                          <SwitchComponent
+                            label="¿Confirmar asistencia?"
+                            name="isConfirmed"
+                            value={value}
                             onChange={onChange}
                           />
                         </div>
                       )}
                     />
+
                     {/* Conditional Companion Section with Smooth Animation */}
-                    {answerSelected === "isConfirmed" && (
+                    {isConfirmed && (
                       <div className="space-y-4 overflow-hidden animate-slide-in-down">
                         {/* Divider */}
                         <div className="h-px bg-linear-to-r from-transparent via-border to-transparent" />
@@ -365,11 +339,11 @@ export const Form = ({ inviteeId, inviteeName }: { inviteeId: string, inviteeNam
                 >
                   <Button
                     type="submit"
-                    isDisabled={!(isSubmitting || answerSelected !== "")}
+                    isDisabled={isSubmitting || !isConfirmed}
                     className={`
                       group relative flex-1 overflow-hidden transition-all duration-500
                       active:scale-[0.98]
-                      ${isSubmitting || answerSelected !== "" ? 'opacity-100' : 'opacity-50'}
+                      ${!isConfirmed ? 'opacity-50' : 'opacity-100'}
                     `}
                   >
                     {/* Button Content */}
@@ -378,12 +352,12 @@ export const Form = ({ inviteeId, inviteeName }: { inviteeId: string, inviteeNam
                         <Loader2 className="h-5 w-5 animate-spin" />
                       )}
                       {!isSubmitting && (
-                        <Send className="h-5 w-5 transition-transform duration-300" />
+                        <Check className="h-5 w-5 transition-transform duration-300" />
                       )}
                       <span className="font-semibold">
                         {isSubmitting
                           ? "Enviando..."
-                          : "Enviar"
+                          : "Confirmar asistencia"
                         }
                       </span>
                     </div>

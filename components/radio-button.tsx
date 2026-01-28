@@ -28,22 +28,19 @@ export const RadioButton = ({
   className = "",
 }: RadioButtonProps) => {
   return (
-    <div className={`flex gap-4 ${className}`}>
+    <div className={`mx-auto w-40 ${className}`}>
       <RadioGroup name={name} value={value} onChange={onChange}>
         {label && <Label>{label}</Label>}
 
         {options.map((option) => (
           <Radio key={option.value} value={option.value} className="my-2 mx-3">
+            <Radio.Content className="w-full">
+              {option.label && <Label>{option.label}</Label>}
+              {option.description && <Description>{option.description}</Description>}
+            </Radio.Content>
             <Radio.Control>
               <Radio.Indicator />
             </Radio.Control>
-
-            <Radio.Content>
-              {option.label && <Label>{option.label}</Label>}
-              {option.description && (
-                <Description>{option.description}</Description>
-              )}
-            </Radio.Content>
           </Radio>
         ))}
       </RadioGroup>

@@ -272,7 +272,7 @@ export const Form = ({ inviteeId, inviteeName }: { inviteeId: string, inviteeNam
                   className="animate-slide-in-up"
                   style={{ animationDelay: "0.5s", animationFillMode: "both" }}
                 >
-                  <div className="space-y-4 rounded-xl bg-linear-to-br from-accent/5 to-primary/5 p-4 border border-accent/10 transition-all duration-500">
+                  <div className="space-y-4 rounded-xl bg-linear-to-br from-accent/5 to-primary/5 px-4 py-2 border border-accent/10 transition-all duration-500">
                     <Controller
                       name="answerSelected"
                       control={control}

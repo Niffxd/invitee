@@ -1,5 +1,5 @@
 import { AlertCircle } from "lucide-react";
-import { getInvitees } from "@/helpers/invitees";
+import { getAllPlusOne, getInvitees } from "@/helpers/invitees";
 import { showToast } from "@/components";
 import { InviteeStats } from "./types";
 
@@ -10,9 +10,11 @@ import { InviteeStats } from "./types";
 export const getInviteeStats = async (): Promise<InviteeStats[]> => {
   try {
     const invitees = await getInvitees();
+    const plusOnes = await getAllPlusOne();
 
-    const total = invitees.length;
-    const confirmed = invitees.filter((invitee) => invitee.isConfirmed).length;
+    const total = invitees.length + plusOnes.length;
+    const declined = invitees.filter((invitee) => invitee.isDeclined).length
+    const confirmed = invitees.filter((invitee) => invitee.isConfirmed).length + plusOnes.length;
     const pending = total - confirmed;
 
     return [
@@ -27,6 +29,12 @@ export const getInviteeStats = async (): Promise<InviteeStats[]> => {
         count: confirmed,
         description: "Confirmations",
         color: "success",
+      },
+      {
+        status: "Declined",
+        count: declined,
+        description: "Rejects",
+        color: "danger",
       },
       {
         status: "Pending",
@@ -55,6 +63,12 @@ export const getInviteeStats = async (): Promise<InviteeStats[]> => {
         count: 0,
         description: "Confirmations",
         color: "success",
+      },
+      {
+        status: "Declined",
+        count: 0,
+        description: "Rejects",
+        color: "danger",
       },
       {
         status: "Pending",

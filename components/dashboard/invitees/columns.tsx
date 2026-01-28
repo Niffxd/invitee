@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { type ColumnDef } from "@tanstack/react-table";
-import { UserCheck, UserSearch, Check, X, Link as LinkIcon } from "lucide-react";
+import { UserCheck, UserSearch, Check, X, Link as LinkIcon, CornerDownRight } from "lucide-react";
+import { CopyButton } from "@/components";
 import { FlexibleInviteeProps } from "./types";
 import { ActionsCell } from "./actions";
 import { productionPath, developmentPath } from "./consts";
@@ -21,13 +21,16 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
         ? "bg-green-500/10 border-green-500/20 text-green-600"
         : "bg-yellow-500/10 border-yellow-500/20 text-yellow-600";
 
-
       if (plusOneId) {
-        return null;
+        return (
+          <div className="flex items-center justify-center gap-2 py-3">
+            <CornerDownRight className="w-4 h-4" />
+          </div>
+        )
       }
 
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 py-3 px-3">
           <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border ${colorClasses}`}>
             {isConfirmed ? (
               <UserCheck className="w-4 h-4" />
@@ -35,9 +38,9 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
               <UserSearch className="w-4 h-4" />
             )}
           </div>
-          <Link href={invitationPath} target="_blank" className="w-4 h-4">
+          <CopyButton text={invitationPath} className="w-4 h-4">
             <LinkIcon className="w-4 h-4" />
-          </Link>
+          </CopyButton>
         </div>
       );
     },
@@ -46,10 +49,8 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
     accessorKey: "name",
     header: "Name",
     cell: (info) => (
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-medium text-foreground">
-          {info.getValue() as string}
-        </span>
+      <div className="flex items-center gap-2 py-3 px-3 text-xs">
+        {info.getValue() as string}
       </div>
     ),
   },
@@ -61,13 +62,13 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
       const { plusOneId } = info.row.original;
 
       if (plusOneId) {
-        return <LinkIcon className="w-4 h-4" />;
+        return null;
       }
 
       return (
-        <span className="text-xs text-muted">
+        <div className="flex items-center gap-2 py-3 px-3 text-xs">
           {hasPlusOne ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
-        </span>
+        </div>
       );
     },
   },
@@ -76,10 +77,16 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
     header: "Notes",
     cell: (info) => {
       const notes = info.getValue() as string;
+      const { plusOneId } = info.row.original;
+
+      if (plusOneId) {
+        return null;
+      }
+
       return (
-        <span className="text-xs text-muted">
+        <div className="flex items-center gap-2 py-3 px-3">
           {notes || "-"}
-        </span>
+        </div>
       );
     },
   },

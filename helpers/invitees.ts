@@ -101,6 +101,7 @@ export const updateInvitee = async (
   hasPlusOne: boolean,
   plusOneName?: string
 ): Promise<void> => {
+  console.log(data);
   const response = await fetch(`/api/invitees/${inviteeId}`, {
     method: "PATCH",
     headers: {

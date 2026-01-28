@@ -1,5 +1,5 @@
 import { type ColumnDef } from "@tanstack/react-table";
-import { UserCheck, UserSearch, Check, X, Link as LinkIcon, CornerDownRight } from "lucide-react";
+import { UserCheck, UserSearch, Check, X, Link as LinkIcon, CornerDownRight, User, UserX } from "lucide-react";
 import { CopyButton } from "@/components";
 import { FlexibleInviteeProps } from "./types";
 import { ActionsCell } from "./actions";
@@ -11,11 +11,12 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
     header: "Status",
     cell: (info) => {
 
-      const { plusOneId } = info.row.original;
-      const isConfirmed = info.getValue() as boolean;
+      const { plusOneId, isConfirmed, isDeclined } = info.row.original;
       const colorClasses = isConfirmed
         ? "bg-green-500/10 border-green-500/20 text-green-600"
-        : "bg-yellow-500/10 border-yellow-500/20 text-yellow-600";
+        : isDeclined
+          ? "bg-red-500/10 border-red-500/20 text-red-600"
+          : "bg-yellow-500/10 border-yellow-500/20 text-yellow-600";
 
       if (plusOneId) {
         return (
@@ -30,6 +31,8 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
           <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border ${colorClasses}`}>
             {isConfirmed ? (
               <UserCheck className="w-4 h-4" />
+            ) : isDeclined ? (
+              <UserX className="w-4 h-4" />
             ) : (
               <UserSearch className="w-4 h-4" />
             )}

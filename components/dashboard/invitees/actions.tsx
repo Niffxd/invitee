@@ -44,7 +44,7 @@ export const ActionsCell = ({
   };
 
   return (
-    <div className="flex items-center gap-2 py-3 px-3">
+    <div className="flex items-center gap-2">
       <button
         onClick={(e) => {
           e.stopPropagation();

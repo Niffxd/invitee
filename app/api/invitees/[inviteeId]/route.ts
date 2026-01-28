@@ -47,7 +47,7 @@ export async function PATCH(
   try {
     const { inviteeId } = await params;
     const body = await request.json();
-    const { isConfirmed, isDeclined, hasPlusOne, notes, plusOneName } = body;
+    const { isConfirmed, hasPlusOne, notes, plusOneName } = body;
 
     if (!inviteeId) {
       return NextResponse.json(
@@ -73,10 +73,6 @@ export async function PATCH(
 
     if (typeof isConfirmed === 'boolean') {
       updateData.isConfirmed = isConfirmed;
-    }
-
-    if (typeof isDeclined === 'boolean') {
-      updateData.isDeclined = isDeclined;
     }
 
     if (typeof hasPlusOne === 'boolean') {

@@ -156,7 +156,7 @@ export const Invitees = () => {
   }
 
   return (
-    <div className="relative min-h-dvh bg-background">
+    <div className="relative min-h-dvh bg-background pb-24">
       {/* Header */}
       <InviteesNavbar handleBack={handleBack} />
 

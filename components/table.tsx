@@ -1,7 +1,7 @@
 import { flexRender, Table as ReactTable } from "@tanstack/react-table";
 import { Loading } from "./loading";
 
-export const Table = <T,>({ table }: { table: ReactTable<T> }) => {
+export const Table = <T,>({ table, rowClassName = "py-2 px-3" }: { table: ReactTable<T>, rowClassName?: string }) => {
   const meta = table.options.meta as
     | {
       onRowClick?: (row: unknown) => void;
@@ -17,7 +17,7 @@ export const Table = <T,>({ table }: { table: ReactTable<T> }) => {
             {headerGroup.headers.map((header) => (
               <th
                 key={header.id}
-                className="px-4 py-2.5 text-left text-xs font-semibold text-foreground"
+                className="px-3 py-2.5 text-left text-xs font-semibold text-foreground"
               >
                 {header.isPlaceholder
                   ? null
@@ -44,13 +44,13 @@ export const Table = <T,>({ table }: { table: ReactTable<T> }) => {
           table.getRowModel().rows.map((row) => (
             <tr
               key={row.id}
-              className="hover:bg-default/20 transition-colors"
+              className="hover:bg-default/20 transition-colors border-b"
               onClick={() => meta?.onRowClick?.(row)}
             >
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
-                  className="px-3 py-3"
+                  className={rowClassName}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>

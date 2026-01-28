@@ -24,5 +24,5 @@ export const InviteesListTable = ({ table }: { table: ReactTable<FlexibleInvitee
     );
   }
 
-  return <Table<FlexibleInviteeProps> table={table} />;
+  return <Table<FlexibleInviteeProps> table={table} rowClassName="" />;
 };

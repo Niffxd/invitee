@@ -1,7 +1,7 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
 import { InviteeStats } from "./types";
-import { CircleCheckBig, Clock4, Users } from "lucide-react";
+import { CircleCheckBig, CircleX, Clock4, Users } from "lucide-react";
 
 // Table columns
 export const dashboardColumns: ColumnDef<InviteeStats>[] = [
@@ -20,6 +20,10 @@ export const dashboardColumns: ColumnDef<InviteeStats>[] = [
       } else if (status === "Confirmed") {
         icon = (
           <CircleCheckBig className="w-4 h-4" color={`var(--${color})`} />
+        );
+      } else if (status === "Declined") {
+        icon = (
+          <CircleX className="w-4 h-4" color={`var(--${color})`} />
         );
       } else {
         icon = (

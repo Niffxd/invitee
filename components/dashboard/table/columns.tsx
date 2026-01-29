@@ -1,7 +1,7 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
 import { InviteeStats } from "./types";
-import { CircleCheckBig, CircleX, Clock4, Users } from "lucide-react";
+import { CircleCheckBig, CircleX, Clock4, SmilePlus, Users } from "lucide-react";
 
 // Table columns
 export const dashboardColumns: ColumnDef<InviteeStats>[] = [
@@ -16,6 +16,10 @@ export const dashboardColumns: ColumnDef<InviteeStats>[] = [
       if (status === "Invitees") {
         icon = (
           <Users className="w-4 h-4" color={`var(--${color})`} />
+        );
+      } else if (status === "+1s") {
+        icon = (
+          <SmilePlus className="w-4 h-4" color={`var(--${color})`} />
         );
       } else if (status === "Confirmed") {
         icon = (
@@ -33,7 +37,7 @@ export const dashboardColumns: ColumnDef<InviteeStats>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          <div className={`inline-flex items-center justify-center w-8 h-8 rounded-lg bg-${color}/10 border border-${color}/20`}>
+          <div className={`inline-flex items-center justify-center w-8 h-8 rounded-lg bg-var(--${color})/10 border border-var(--${color})/20`}>
             {icon}
           </div>
           <span className="text-sm font-semibold text-foreground">{status}</span>

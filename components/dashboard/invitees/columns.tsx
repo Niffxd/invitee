@@ -1,5 +1,5 @@
 import { type ColumnDef } from "@tanstack/react-table";
-import { UserCheck, UserSearch, Check, X, Link as LinkIcon, CornerDownRight, User, UserX } from "lucide-react";
+import { UserCheck, UserSearch, Check, X, Link as LinkIcon, CornerDownRight, UserX } from "lucide-react";
 import { CopyButton } from "@/components";
 import { FlexibleInviteeProps } from "./types";
 import { ActionsCell } from "./actions";

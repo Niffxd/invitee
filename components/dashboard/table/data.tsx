@@ -12,9 +12,10 @@ export const getInviteeStats = async (): Promise<InviteeStats[]> => {
     const invitees = await getInvitees();
     const plusOnes = await getAllPlusOne();
 
-    const total = invitees.length + plusOnes.length;
+    const plusOneConfirmed = plusOnes.length;
+    const total = invitees.length + plusOneConfirmed;
+    const confirmed = invitees.filter((invitee) => invitee.isConfirmed).length + plusOneConfirmed;
     const declined = invitees.filter((invitee) => invitee.isDeclined).length
-    const confirmed = invitees.filter((invitee) => invitee.isConfirmed).length + plusOnes.length;
     const pending = total - confirmed - declined;
 
     return [
@@ -23,6 +24,12 @@ export const getInviteeStats = async (): Promise<InviteeStats[]> => {
         count: total,
         description: "Total invitees",
         color: "accent",
+      },
+      {
+        status: "+1s",
+        count: plusOneConfirmed,
+        description: "Total +1s",
+        color: "danger-foreground",
       },
       {
         status: "Confirmed",
@@ -57,6 +64,12 @@ export const getInviteeStats = async (): Promise<InviteeStats[]> => {
         count: 0,
         description: "Total invitees",
         color: "accent",
+      },
+      {
+        status: "+1s",
+        count: 0,
+        description: "Total +1s",
+        color: "danger-foreground",
       },
       {
         status: "Confirmed",

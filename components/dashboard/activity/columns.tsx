@@ -1,7 +1,7 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { Clock, Download, UserCheck, UserPlus, UserX } from "lucide-react";
 import { ActivityItem } from "./types";
-import { formatTimestamp, getActivityColor } from "./utils";
+import { formatTimestamp, getActivityColor } from "@/helpers";
 
 const getActivityIcon = (type: ActivityItem["type"]) => {
   switch (type) {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAdminDb } from "@/db/admin";
+import { getAdminDb } from "@/db";
 
 const db = getAdminDb();
 

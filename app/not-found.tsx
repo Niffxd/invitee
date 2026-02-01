@@ -1,10 +1,10 @@
 "use client";
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Home, AlertTriangle } from 'lucide-react';
 import { Button } from '@heroui/react';
-import { useEffect, useState } from 'react';
-import { Wrapper } from '@/components/wrapper';
+import { Wrapper } from '@/components';
 
 export default function NotFound() {
   const [mounted, setMounted] = useState(false);

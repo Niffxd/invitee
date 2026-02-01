@@ -1,5 +1,4 @@
-import { Wrapper } from "@/components";
-import { NewInviteeForm } from "@/components/dashboard/invitees";
+import { Wrapper, NewInviteeForm } from "@/components";
 
 export default function NewInviteePage() {
   return (

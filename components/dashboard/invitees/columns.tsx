@@ -2,7 +2,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { UserCheck, UserSearch, Check, X, Link as LinkIcon, CornerDownRight, UserX } from "lucide-react";
 import { CopyButton } from "@/components";
 import { FlexibleInviteeProps } from "./types";
-import { ActionsCell } from "./actions";
+import { InviteesActionsCell } from "./components";
 import { invitationPath, invitationText } from "./consts";
 
 export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
@@ -98,7 +98,7 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
 
       const meta = table.options.meta as { onInviteeDeleted?: (inviteeId: string) => void } | undefined;
       return (
-        <ActionsCell
+        <InviteesActionsCell
           inviteeId={inviteeId}
           name={name}
           onDeleted={() => meta?.onInviteeDeleted?.(inviteeId)}

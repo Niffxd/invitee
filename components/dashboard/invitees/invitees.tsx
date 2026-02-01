@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCoreRowModel, getExpandedRowModel, Row, useReactTable } from "@tanstack/react-table";
 import { Loading } from "@/components";
-import { getAllPlusOneById, getInvitees } from "@/helpers";
 import { CredentialProps } from "@/types";
-import { InviteesNavbar } from "./navbar";
-import { InviteesListTable } from "./list";
+import { getAllPlusOneById, getInvitees } from "@/helpers";
+import { InviteesNavbar, InviteesListTable } from "./components";
 import { inviteesColumns } from "./columns";
 import { FlexibleInviteeProps, SerializedInviteeProps } from "./types";
 

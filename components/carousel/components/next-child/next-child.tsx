@@ -3,12 +3,12 @@ import { NextChildProps } from "./types";
 export const NextChild = ({
   text,
   icon,
-  className,
+  className = "",
 }: NextChildProps) => {
   const textArray = Array.isArray(text) ? text : [text];
 
   return (
-    <div className={`flex flex-col items-center justify-center mt-12 pb-8 ${className}`}>
+    <div className={`flex flex-col items-center justify-center pb-4 ${className}`}>
       <div
         className="inline-flex flex-col gap-4 items-center justify-center w-50 rounded-full bg-linear-to-br from-primary/40 via-primary/30 to-primary/20 relative shadow-lg animate-scale-in"
         style={{ animationDelay: "0.1s", animationFillMode: "both" }}

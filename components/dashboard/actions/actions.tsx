@@ -1,6 +1,6 @@
 import { Ban, FileDown, LibraryBig, Plus } from "lucide-react";
 import { Button } from "./components";
-import { defaultPath } from "./components/consts";
+import { defaultPath } from "./consts";
 
 export const DashboardActions = () => {
   return (

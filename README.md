@@ -17,8 +17,9 @@ Invitee is a sleek web application designed for managing event invitations and t
 - 📱 **Fully Responsive** - Works seamlessly on desktop and mobile devices
 
 ### Event Management Features
-- 📊 **Dashboard** - Admin interface for managing invitations
-- 🔥 **Firebase Integration** - Real-time database for guest data
+- 📊 **Dashboard** - Admin interface (invitees list, activity, new invitee)
+- 🔐 **Login** - Password-protected admin access (bcrypt)
+- 🔥 **Firebase Admin** - Server-side Firestore via API routes
 - 🎟️ **Unique Invite Links** - Each guest receives a personalized invitation URL
 - 📈 **Guest Tracking** - Track confirmations, plus ones, and guest notes
 
@@ -27,39 +28,72 @@ Invitee is a sleek web application designed for managing event invitations and t
 - **Framework:** [Next.js 16](https://nextjs.org/) (React 19)
 - **UI Library:** [HeroUI 3.0](https://heroui.dev/) (Beta)
 - **Styling:** [Tailwind CSS 4](https://tailwindcss.com/)
-- **Database:** [Firebase Firestore](https://firebase.google.com/docs/firestore)
+- **Database:** [Firebase Firestore](https://firebase.google.com/docs/firestore) via [Firebase Admin SDK](https://firebase.google.com/docs/admin/setup)
 - **Animations:** [Motion](https://motion.dev/)
 - **Form Management:** [React Hook Form](https://react-hook-form.com/)
+- **Tables:** [TanStack React Table](https://tanstack.com/table/latest)
 - **Icons:** [Lucide React](https://lucide.dev/)
+- **Dates:** [Day.js](https://day.js.org/)
+- **Auth:** bcryptjs (password hashing)
 - **Language:** TypeScript
 
 ## Project Structure
 
 ```
 invitee/
-├── app/                    # Next.js App Router
-│   ├── dashboard/         # Admin dashboard page
-│   ├── layout.tsx         # Root layout with backgrounds
-│   ├── page.tsx           # Main invitation page
-│   ├── not-found.tsx      # 404 page
-│   └── globals.css        # Global styles
-├── components/            # React components
-│   ├── carousel.tsx       # Carousel container
-│   ├── form.tsx           # RSVP form
-│   ├── header.tsx         # Event header
-│   ├── schedule.tsx       # Event schedule
-│   ├── details.tsx        # Event details
-│   ├── sparkles.tsx       # Sparkle background effect
-│   ├── gradient.tsx       # Gradient background
-│   └── ...               # Other UI components
-├── db/                    # Firebase configuration
-│   └── firebase.ts        # Firebase initialization
-├── helpers/               # Helper functions
-│   └── invitees.ts        # CRUD operations for invitees
-├── types/                 # TypeScript type definitions
-│   ├── invitee.ts         # Invitee types
-│   └── plusOne.ts         # Plus one types
-└── package.json           # Project dependencies
+├── app/                      # Next.js App Router
+│   ├── api/                  # API routes (Firebase Admin SDK)
+│   │   ├── auth/login/       # Login endpoint
+│   │   ├── invitees/         # Invitee CRUD, [inviteeId], batch, plus-ones
+│   │   └── plus-ones/        # Plus one CRUD, [plusOneId]
+│   ├── dashboard/            # Admin dashboard
+│   │   ├── activity/         # Activity / RSVP list
+│   │   ├── invitees/         # Invitee management
+│   │   └── new-invitee/      # Add new invitee
+│   ├── login/                # Login page
+│   ├── layout.tsx            # Root layout
+│   ├── page.tsx              # Main invitation page
+│   ├── not-found.tsx         # 404 page
+│   └── globals.css           # Global styles
+├── components/               # React components
+│   ├── background/           # Sparkles background
+│   ├── carousel/             # Carousel container
+│   ├── copy-button/          # Copy-to-clipboard
+│   ├── dashboard/            # Dashboard (navbar, table, activity, invitees)
+│   ├── details/              # Event details
+│   ├── form/                 # RSVP form
+│   ├── gradient.tsx          # Gradient background
+│   ├── home/                 # Home page + welcome / invitation link UI
+│   ├── loading/              # Loading state
+│   ├── login/                # Login form
+│   ├── radio-button/         # Radio input
+│   ├── schedule/             # Event schedule
+│   ├── select/               # Select input
+│   ├── switch/               # Switch toggle
+│   ├── table/                # Table component
+│   └── wrapper/              # Layout wrapper
+├── consts/                   # Shared constants (details, home, schedule)
+├── db/                       # Firebase Admin SDK
+│   ├── admin.ts              # Firebase Admin initialization
+│   ├── index.ts              # Re-exports
+│   └── migration.ts          # Migration utilities
+├── helpers/                  # Client helpers (call API routes)
+│   ├── invitees.ts           # Invitee CRUD helpers
+│   ├── utils.ts              # Utilities
+│   └── index.ts
+├── mocks/                    # Mock data (e.g. activities)
+├── types/                    # TypeScript types
+│   ├── invitee.ts            # Invitee types
+│   ├── plusOne.ts            # Plus one types
+│   ├── credential.ts         # Auth credential types
+│   └── index.ts
+├── scripts/                  # One-off scripts
+│   ├── createInvitees.js     # Batch create invitees
+│   ├── migrate-passwords.js  # Password hashing migration
+│   └── README.md
+├── VERCEL_DEPLOYMENT.md      # Vercel + Firebase setup
+├── SECURITY_MIGRATION.md     # Password migration guide
+└── package.json
 ```
 
 ## Getting Started
@@ -86,8 +120,8 @@ pnpm install
 3. Set up Firebase:
    - Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
    - Enable Firestore Database
-   - Copy your Firebase configuration
-   - Update `db/firebase.ts` with your credentials (consider using environment variables for production)
+   - For **local dev**: use a service account key file (see `db/admin.ts`)
+   - For **production** (e.g. Vercel): set `FIREBASE_PROJECT_ID`, `FIREBASE_CLIENT_EMAIL`, and `FIREBASE_PRIVATE_KEY` in your environment
 
 4. Run the development server:
 ```bash
@@ -117,12 +151,16 @@ See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for detailed instructions on 
   inviteeId: string;        // Unique UUID
   name: string;             // Guest name
   isConfirmed: boolean;     // Attendance confirmation
+  isDeclined: boolean;      // Declined invitation
   hasPlusOne: boolean;      // Whether bringing a +1
   notes: string;            // Additional notes
   createdAt: Timestamp;     // Creation timestamp
   updatedAt: Timestamp;     // Last update timestamp
 }
 ```
+
+#### `credentials` (admin login)
+Stores hashed passwords for dashboard access. See [SECURITY_MIGRATION.md](./SECURITY_MIGRATION.md) for schema and migration.
 
 #### `plusOnes`
 ```typescript
@@ -142,18 +180,17 @@ See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for detailed instructions on 
 - `pnpm start` - Start production server
 - `pnpm lint` - Run ESLint
 
-## API Functions
+## API & Helpers
 
-The application includes helper functions for managing invitees:
+**API routes** (under `app/api/`) use the Firebase Admin SDK server-side. **Helpers** in `helpers/invitees.ts` call these routes from the client:
 
-- `createInvitee(name)` - Create a single invitee
-- `createInvitees(names[])` - Batch create multiple invitees
-- `updateInvitee(inviteeId, data)` - Update invitee details
-- `getInvitee(inviteeId)` - Retrieve single invitee
-- `getInvitees()` - Get all invitees
+- `createInvitee(name)` / `createInvitees(names[])` - Create invitee(s)
+- `updateInvitee(inviteeId, data)` - Update invitee
+- `getInvitee(inviteeId)` / `getInvitees()` - Get invitee(s)
 - `deleteInvitee(inviteeId)` - Delete invitee and associated plus one
-- `getAllPlusOne()` - Get all plus ones
-- `deletePlusOne(plusOneId)` - Delete a plus one
+- `getAllPlusOne()` / `deletePlusOne(plusOneId)` - Plus one CRUD
+
+Auth: `POST /api/auth/login` for admin login.
 
 ## Development Notes
 
@@ -163,14 +200,11 @@ The application includes helper functions for managing invitees:
 - Toast notifications provide user feedback
 - The carousel component enables smooth section navigation
 
-## Security Considerations
+## Security & Docs
 
-⚠️ **Important:** The Firebase configuration in `db/firebase.ts` contains API keys. For production:
-
-1. Move sensitive credentials to environment variables
-2. Set up Firebase Security Rules
-3. Implement proper authentication
-4. Use Firebase App Check for abuse prevention
+- **Firebase:** Use environment variables in production; see [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md).
+- **Passwords:** Stored hashed (bcrypt). To migrate existing plain-text passwords, see [SECURITY_MIGRATION.md](./SECURITY_MIGRATION.md).
+- **Best practices:** Firebase Security Rules, auth for admin routes, and (optional) Firebase App Check.
 
 ## Contributing
 

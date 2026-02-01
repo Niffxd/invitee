@@ -1,0 +1,1 @@
+export const scheduleNextChildText = "Detalles de la fiesta";

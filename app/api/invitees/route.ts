@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAdminDb } from '@/db/admin';
+import { getAdminDb } from '@/db';
 import { v4 as uuidv4 } from 'uuid';
 import { capitalizeAll } from '@/helpers';
 

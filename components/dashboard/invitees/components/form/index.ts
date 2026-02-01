@@ -1,1 +1,1 @@
-export * from "./form";
+export { NewInviteeForm } from "./form";

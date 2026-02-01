@@ -1,0 +1,38 @@
+import { Description, Label, Radio, RadioGroup } from "@heroui/react"
+import { RadioButtonProps } from "./types";
+
+export const RadioButton = ({
+  options,
+  value,
+  onChange,
+  name,
+  label,
+  description,
+  className = "",
+}: RadioButtonProps) => {
+  return (
+    <div className={`mx-auto w-40 ${className}`}>
+      <RadioGroup name={name} value={value} onChange={onChange}>
+        {label && <Label>{label}</Label>}
+
+        {options.map((option) => (
+          <Radio key={option.value} value={option.value} className="my-2 mx-3">
+            <Radio.Content className="w-full">
+              {option.label && <Label>{option.label}</Label>}
+              {option.description && <Description>{option.description}</Description>}
+            </Radio.Content>
+            <Radio.Control>
+              <Radio.Indicator />
+            </Radio.Control>
+          </Radio>
+        ))}
+      </RadioGroup>
+
+      {description && (
+        <p className="text-sm text-muted">
+          {description} <span className="font-medium">{value}</span>
+        </p>
+      )}
+    </div>
+  )
+};

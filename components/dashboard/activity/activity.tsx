@@ -2,13 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CredentialProps } from "@/types";
-import { Loading } from "../../loading";
-import { getFilteredActivities } from "./utils";
-import { ActivityNavbar } from "./navbar";
-import { Filters as ActivityFilters } from "./components";
-import { ActivityListTable } from "./list";
 import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import { CredentialProps } from "@/types";
+import { Loading } from "@/components";
+import { ActivityListTable, ActivityNavbar, Filters as ActivityFilters } from "./components";
+import { getFilteredActivities } from "@/helpers";
 import { activityColumns } from "./columns";
 
 export const Activity = () => {

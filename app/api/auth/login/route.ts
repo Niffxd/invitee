@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'; // optional but avoids accidental static
 
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { getAdminDb } from '@/db/admin';
+import { getAdminDb } from '@/db';
 
 const allowedOrigin = process.env.CORS_ORIGIN ?? '*';
 

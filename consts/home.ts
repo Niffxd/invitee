@@ -1,0 +1,1 @@
+export const homeNextChildText = " Desliza para ver horario, lugar, detalles y confirmar tu asistencia";

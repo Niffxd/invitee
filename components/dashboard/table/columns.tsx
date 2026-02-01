@@ -1,7 +1,7 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
-import { InviteeStats } from "./types";
 import { CircleCheckBig, CircleX, Clock4, SmilePlus, Users } from "lucide-react";
+import { InviteeStats } from "./types";
 
 // Table columns
 export const dashboardColumns: ColumnDef<InviteeStats>[] = [

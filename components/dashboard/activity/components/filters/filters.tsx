@@ -1,14 +1,11 @@
-import { type Dispatch, type SetStateAction } from "react";
 import { Filter } from "lucide-react";
 import { Select } from "@/components";
+import { FiltersProps } from "./types";
 
 export const Filters = ({
   filter,
   setFilter,
-}: {
-  filter: string[];
-  setFilter: Dispatch<SetStateAction<string[]>>;
-}) => {
+}: FiltersProps) => {
   return (
     <div className="relative border-b border-bordedivg-surface/80 backdrop-blur-sm">
       <div className="container mx-auto px-8 py-4 flex items-center gap-2">

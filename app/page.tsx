@@ -1,5 +1,3 @@
-"use client";
-
 import { Suspense } from "react";
 import { Loading, Home as HomeComponent } from "@/components";
 

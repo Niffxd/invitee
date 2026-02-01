@@ -55,7 +55,7 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
   },
   {
     accessorKey: "hasPlusOne",
-    header: "+ 1",
+    header: "+1",
     cell: (info) => {
       const hasPlusOne = info.getValue() as boolean;
       const { plusOneId } = info.row.original;

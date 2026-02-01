@@ -5,7 +5,7 @@ export const Details = () => {
   const { features, needs } = PartyElements;
 
   return (
-    <div className="relative p-8">
+    <div className="relative p-6">
       <div className="relative max-w-xl mx-auto">
         <div
           className="animate-slide-in-up"
@@ -15,8 +15,8 @@ export const Details = () => {
             <div className="absolute -inset-0.5 bg-linear-to-r from-accent via-primary to-accent rounded-2xl opacity-75 blur transition duration-500" />
 
             <div className="relative">
-              <Card className="w-full p-6 backdrop-blur-sm bg-surface/90 border border-border/30 shadow-lg">
-                <h3 className="text-xl font-bold text-foreground mb-4">¿Qué necesitas traer?</h3>
+              <Card className="w-full p-4 backdrop-blur-sm bg-surface/90 border border-border/30 shadow-lg">
+                <h3 className="text-lg font-bold text-foreground mb-2">¿Qué necesitas traer?</h3>
                 <ul className="space-y-3">
                   {needs.map((need, index) => (
                     <li
@@ -41,7 +41,7 @@ export const Details = () => {
                     </li>
                   ))}
                 </ul>
-                <h3 className="text-xl font-bold text-foreground mt-6 mb-4">¿Qué tendremos?</h3>
+                <h3 className="text-lg font-bold text-foreground mt-2 mb-2">¿Qué tendremos?</h3>
                 <ul className="space-y-3 mb-6">
                   {features.map((feature, index) => (
                     <li

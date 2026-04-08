@@ -41,7 +41,13 @@ export const SparklesBackground = () => {
             width: `${sparkle.size}px`,
             height: `${sparkle.size}px`,
             animationDelay: `${sparkle.delay}s`,
-            backgroundColor: 'oklch(87.27% 0.1719 91.20)',
+            backgroundColor:
+              sparkle.id % 3 === 0
+                ? "var(--palette-bronze)"
+                : sparkle.id % 3 === 1
+                  ? "var(--palette-sage)"
+                  : "var(--palette-papaya)",
+            opacity: 0.45,
             transform: `translateY(${scrollY * (sparkle.id % 3) * 0.05}px)`,
             transition: 'transform 0.1s ease-out',
           }}

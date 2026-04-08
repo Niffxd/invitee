@@ -30,7 +30,7 @@ export const DashboardNavbar = ({
           </button>
           <button
             onClick={handleLogout}
-            className="h-10 px-5 text-sm font-medium text-black bg-accent hover:bg-accent/90 border border-accent-soft-hover rounded-lg transition-all shadow-sm hover:shadow-md flex items-center justify-center"
+            className="h-10 px-5 text-sm font-medium text-accent-foreground bg-accent hover:bg-accent/90 border border-accent-soft-hover rounded-lg transition-all shadow-sm hover:shadow-md flex items-center justify-center"
           >
             Logout
           </button>

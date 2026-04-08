@@ -79,8 +79,8 @@ export default function NotFound() {
                       <defs>
                         {/* Gradient for the stickman */}
                         <linearGradient id="stickmanGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                          <stop offset="0%" style={{ stopColor: 'oklch(87.27% 0.1719 91.20)', stopOpacity: 1 }} />
-                          <stop offset="100%" style={{ stopColor: 'oklch(87.27% 0.1719 91.20)', stopOpacity: 0.7 }} />
+                          <stop offset="0%" style={{ stopColor: "var(--accent)", stopOpacity: 1 }} />
+                          <stop offset="100%" style={{ stopColor: "var(--primary)", stopOpacity: 0.75 }} />
                         </linearGradient>
 
                         {/* Glow filter */}
@@ -182,7 +182,7 @@ export default function NotFound() {
                       size="lg"
                     >
                       {/* Button Shimmer Effect on Hover */}
-                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-(--palette-cornsilk)/35 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
 
                       <div className="relative flex items-center justify-center gap-2">
                         <Home className="h-5 w-5 transition-transform group-hover:scale-110" />

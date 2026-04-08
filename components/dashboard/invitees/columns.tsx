@@ -13,10 +13,10 @@ export const inviteesColumns: ColumnDef<FlexibleInviteeProps>[] = [
 
       const { plusOneId, isConfirmed, isDeclined } = info.row.original;
       const colorClasses = isConfirmed
-        ? "bg-green-500/10 border-green-500/20 text-green-600"
+        ? "bg-success/12 border-success/25 text-success"
         : isDeclined
-          ? "bg-red-500/10 border-red-500/20 text-red-600"
-          : "bg-yellow-500/10 border-yellow-500/20 text-yellow-600";
+          ? "bg-danger/12 border-danger/25 text-danger"
+          : "bg-accent/12 border-accent/25 text-accent";
 
       if (plusOneId) {
         return (

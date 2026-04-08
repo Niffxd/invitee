@@ -10,7 +10,7 @@ export const NextChild = ({
   return (
     <div className={`flex flex-col items-center justify-center pb-4 ${className}`}>
       <div
-        className="inline-flex flex-col gap-4 items-center justify-center w-50 rounded-full bg-linear-to-br from-primary/40 via-primary/30 to-primary/20 relative shadow-lg animate-scale-in"
+        className="inline-flex flex-col gap-4 items-center justify-center w-50 rounded-full bg-linear-to-br from-primary/40 via-primary/30 to-primary/20 relative animate-scale-in"
         style={{ animationDelay: "0.1s", animationFillMode: "both" }}
       >
         <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping-slow" />

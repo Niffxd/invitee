@@ -39,7 +39,7 @@ export const Table = <T,>({
           <tr>
             <td
               colSpan={table.getAllLeafColumns().length}
-              className="px-4 py-6 text-center text-sm text-muted-foreground"
+              className="px-4 py-6 text-center text-sm text-muted"
             >
               <Loading />
             </td>

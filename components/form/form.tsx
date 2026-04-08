@@ -20,7 +20,7 @@ export const Form = ({ inviteeId, inviteeName }: FormProps) => {
   } = useForm<FormData>({
     defaultValues: {
       name: inviteeName,
-      host: "Nicolás Sanchez",
+      host: "Eve Abdala / Ivan Ampuero",
       notes: "",
       isConfirmed: null,
       hasPlusOne: false,

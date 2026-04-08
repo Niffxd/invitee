@@ -5,13 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { getInvitee } from "@/helpers";
 import { InviteeProps } from "@/types";
 import { Welcome } from "./components";
-import {
-  Wrapper,
-  Carousel,
-  Schedule,
-  Details,
-  Form,
-} from "@/components";
+import { Wrapper, Carousel, Schedule, Details, Form } from "@/components";
 
 export const Home = () => {
   const searchParams = useSearchParams();
@@ -19,7 +13,8 @@ export const Home = () => {
 
   const [invitee, setInvitee] = useState<InviteeProps | null>(null);
 
-  const isValidInviteeId = typeof inviteeId === "string" && inviteeId.length > 0;
+  const isValidInviteeId =
+    typeof inviteeId === "string" && inviteeId.length > 0;
 
   useEffect(() => {
     let isMounted = true;
@@ -58,7 +53,7 @@ export const Home = () => {
   if (!isValidInviteeId || !invitee) {
     return (
       <Wrapper>
-        <Welcome inviteeId={inviteeId} />
+        <Welcome />
       </Wrapper>
     );
   }
@@ -69,11 +64,8 @@ export const Home = () => {
         <Welcome inviteeId={inviteeId} />
         <Schedule />
         <Details />
-        <Form
-          inviteeId={inviteeId}
-          inviteeName={invitee.name}
-        />
+        <Form inviteeId={inviteeId} inviteeName={invitee.name} />
       </Carousel>
     </Wrapper>
   );
-}
+};

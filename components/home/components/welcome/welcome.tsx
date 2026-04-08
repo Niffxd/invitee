@@ -1,4 +1,11 @@
-import { AlertCircle, ArrowBigDown, CakeSlice, PartyPopper } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowBigDown,
+  CakeSlice,
+  PartyPopper,
+} from "lucide-react";
+import localFont from "next/font/local";
+import { Playfair_Display } from "next/font/google";
 import { ButtonLink } from "./components";
 import {
   alternativeInvitationLinkText,
@@ -6,15 +13,37 @@ import {
   alternativeInviteeMessage,
   inviteeMessage,
   uniqueInvitationTip,
-  invitationLink
+  invitationLink,
 } from "./consts";
 import { WelcomeProps } from "./types";
+
+const sweetHipsterFont = localFont({
+  src: [
+    {
+      path: "../../../../assets/fonts/SweetHipster.ttf",
+      weight: "600",
+      style: "normal",
+    },
+  ],
+});
+
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  weight: '400',
+  style: 'normal',
+  variable: '--font-playfair-display',
+  display: 'swap',
+});
 
 export const Welcome = ({ inviteeId }: WelcomeProps) => {
   return (
     <div className="text-center relative py-12">
       {/* Icon with enhanced animations */}
-      <ButtonLink enable={inviteeId !== null} to="/login" description="Go to login">
+      <ButtonLink
+        enable={inviteeId !== null}
+        to="/login"
+        description="Go to login"
+      >
         <div
           className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-linear-to-br from-primary/40 via-primary/30 to-primary/20 mb-6 relative shadow-lg animate-scale-in"
           style={{ animationDelay: "0.1s", animationFillMode: "both" }}
@@ -39,14 +68,19 @@ export const Welcome = ({ inviteeId }: WelcomeProps) => {
       )}
 
       {/* Main title with enhanced gradient and animation */}
-      <h1
-        className="text-5xl md:text-7xl font-display font-bold mb-4 animate-slide-in-up"
+      <div
+        className="text-5xl md:text-7xl font-display font-bold pb-4 animate-slide-in-up flex flex-col"
         style={{ animationDelay: "0.3s", animationFillMode: "both" }}
       >
-        <span className="inline-block bg-linear-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-gradient-shift transition-transform cursor-default">
-          ¡Gran Fiesta!
+        <span
+          className={`block bg-linear-to-r from-white via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-gradient-shift transition-transform cursor-default ${sweetHipsterFont.className} text-9xl`}
+        >
+          Birthday
         </span>
-      </h1>
+        <span className="mt-[-70px] block bg-linear-to-r from-white to-yellow-600 bg-clip-text text-transparent animate-gradient-shift transition-transform cursor-default text-6xl leading-normal">
+          Party
+        </span>
+      </div>
 
       {/* Description with fade-in animation */}
       <p
@@ -56,15 +90,42 @@ export const Welcome = ({ inviteeId }: WelcomeProps) => {
         {inviteeId ? inviteeMessage : alternativeInviteeMessage}
       </p>
 
-      {/* Decorative line with animation */}
-      <div
-        className="mt-8 mx-auto w-32 h-1 bg-linear-to-r from-transparent via-primary/50 to-transparent animate-scale-in"
-        style={{ animationDelay: "0.5s", animationFillMode: "both" }}
-      />
+      <div className="flex justify-center items-center gap-3 mt-4">
+        <div className="w-[160px]">
+          <span
+            className={`bg-linear-to-r from-white via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-gradient-shift transition-transform cursor-default ${sweetHipsterFont.className} text-9xl`}
+          >
+            Eve
+          </span>
+          <div className="flex justify-center items-baseline">
+            <span>x</span>
+            <span className="block text-white bg-clip-text animate-gradient-shift transition-transform cursor-default text-xl">Años</span>
+          </div>
+        </div>
+        <span className={`block text-white bg-clip-text animate-gradient-shift transition-transform cursor-default text-4xl ${playfairDisplay.className}`}>
+          Y
+        </span>
+        <div className="w-[160px]">
+          <span
+            className={`bg-linear-to-r from-white via-amber-500 to-yellow-600 bg-clip-text text-transparent animate-gradient-shift transition-transform cursor-default ${sweetHipsterFont.className} text-9xl`}
+          >
+            Ivan
+          </span>
+          <div className="flex justify-center items-baseline">
+            <span>x</span>
+            <span className="block text-white bg-clip-text animate-gradient-shift transition-transform cursor-default text-xl">Años</span>
+          </div>
+        </div>
+      </div>
+
       {/* Unique Invitation Tip */}
       <div
-        className="animate-slide-in-up mx-auto"
-        style={{ animationDelay: "0.25s", animationFillMode: "both", width: "fit-content" }}
+        className="mt-8 animate-slide-in-up mx-auto"
+        style={{
+          animationDelay: "0.25s",
+          animationFillMode: "both",
+          width: "fit-content",
+        }}
       >
         <div className="rounded-lg bg-linear-to-r from-primary/10 via-accent/10 to-primary/10 border border-primary/20 p-3 mb-4">
           <div className="flex items-center gap-2">
@@ -91,7 +152,10 @@ export const Welcome = ({ inviteeId }: WelcomeProps) => {
                 style={{ animationDelay: "0.1s", animationFillMode: "both" }}
               >
                 <div className="absolute inset-2 rounded-full bg-warning" />
-                <CakeSlice className="w-12 h-12 text-primary relative z-50" color="black" />
+                <CakeSlice
+                  className="w-12 h-12 text-primary relative z-50"
+                  color="black"
+                />
               </div>
             </ButtonLink>
             <p className="text-primary text-xs font-medium">

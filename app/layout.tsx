@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="light" data-theme="light" suppressHydrationWarning>
+    <html className="light" data-theme="light" suppressHydrationWarning lang="es">
       <body className="bg-background text-foreground">
         <SpeedInsights />
         <Toast.Container placement="bottom" />

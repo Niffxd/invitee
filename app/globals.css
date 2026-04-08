@@ -164,21 +164,6 @@
   background-clip: text;
 }
 
-.hero-invite-label {
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(
-    90deg,
-    var(--palette-ink) 0%,
-    var(--palette-bronze) 50%,
-    var(--palette-sage) 100%
-  );
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-
 /* Smooth Scroll */
 html {
   scroll-behavior: smooth;

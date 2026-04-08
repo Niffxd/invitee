@@ -80,7 +80,7 @@ export const Welcome = ({ inviteeId }: WelcomeProps) => {
           Birthday
         </span>
         <span
-          className={`mt-[-0.45em] block hero-gradient-text-row ${sweetHipsterFont.className} text-6xl leading-tight`}
+          className={`mt-[-60px] block hero-gradient-text-row text-6xl leading-tight`}
         >
           Party
         </span>
@@ -107,7 +107,7 @@ export const Welcome = ({ inviteeId }: WelcomeProps) => {
           </div>
         </div>
         <span className={`block text-foreground/85 animate-gradient-shift transition-transform cursor-default text-4xl ${playfairDisplay.className}`}>
-          Y
+          &
         </span>
         <div className="w-[160px]">
           <span

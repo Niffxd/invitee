@@ -28,7 +28,7 @@ export const getInviteeStats = async (): Promise<InviteeStats[]> => {
         status: "+1s",
         count: plusOneConfirmed,
         description: "Total +1s",
-        color: "danger-foreground",
+        color: "accent",
       },
       {
         status: "Confirmed",
@@ -68,7 +68,7 @@ export const getInviteeStats = async (): Promise<InviteeStats[]> => {
         status: "+1s",
         count: 0,
         description: "Total +1s",
-        color: "danger-foreground",
+        color: "accent",
       },
       {
         status: "Confirmed",

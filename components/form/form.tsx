@@ -20,7 +20,7 @@ export const Form = ({ inviteeId, inviteeName }: FormProps) => {
   } = useForm<FormData>({
     defaultValues: {
       name: inviteeName,
-      host: "Eve Abdala / Ivan Ampuero",
+      host: "Ivan Ampuero / Eve Abdala",
       notes: "",
       isConfirmed: null,
       hasPlusOne: false,
@@ -121,7 +121,7 @@ export const Form = ({ inviteeId, inviteeName }: FormProps) => {
                   className="relative mb-2 animate-fade-in"
                   style={{ animationDelay: "0.2s", animationFillMode: "both" }}
                 >
-                  <h1 className="text-2xl sm:text-3xl font-bold bg-linear-to-r from-accent via-primary to-accent bg-clip-text text-transparent animate-gradient-shift mb-3">
+                  <h1 className="text-lg font-bold bg-linear-to-r from-accent via-primary to-accent bg-clip-text text-transparent animate-gradient-shift mb-1">
                     Confirma tu asistencia
                   </h1>
                   {/* Decorative line with animation */}
@@ -146,7 +146,7 @@ export const Form = ({ inviteeId, inviteeName }: FormProps) => {
                         className="group"
                       >
                         <div className="flex items-center gap-2">
-                          <Label className="text-sm font-medium text-muted">Invitado/a</Label>
+                          <Label className="text-xs font-medium text-muted">Invitado/a</Label>
                           <div className="flex items-center gap-1.5 text-xs text-muted/70">
                             <Lock className="h-3.5 w-3.5" />
                           </div>
@@ -170,7 +170,7 @@ export const Form = ({ inviteeId, inviteeName }: FormProps) => {
                         className="group"
                       >
                         <div className="flex items-center gap-2">
-                          <Label className="text-sm font-medium text-muted">Organizador</Label>
+                          <Label className="text-xs font-medium text-muted">Organizador</Label>
                           <div className="flex items-center gap-1.5 text-xs text-muted/70">
                             <Lock className="h-3.5 w-3.5" />
                           </div>
@@ -211,7 +211,7 @@ export const Form = ({ inviteeId, inviteeName }: FormProps) => {
                           <div className="flex items-center justify-between">
                             <Label
                               htmlFor="notes"
-                              className="text-sm font-medium transition-all duration-300 group-focus-within/notes:text-accent"
+                              className="text-xs font-medium transition-all duration-300 group-focus-within/notes:text-accent"
                             >
                               Notas adicionales
                             </Label>
@@ -233,11 +233,11 @@ export const Form = ({ inviteeId, inviteeName }: FormProps) => {
                               aria-label="Mensaje para el organizador"
                               placeholder="Mensaje para el organizador..."
                               rows={4}
-                              className="relative w-full transition-all duration-300 focus:shadow-xl"
+                              className="relative w-full transition-all duration-300 focus:shadow-xl text-sm"
                             />
                           </div>
                           {errors.notes && (
-                            <div className="flex items-center gap-2 text-sm text-danger animate-slide-in-down">
+                            <div className="flex items-center gap-2 text-xs text-danger animate-slide-in-down">
                               <AlertCircle className="h-4 w-4 animate-pulse" />
                               <span>{errors.notes.message}</span>
                             </div>
@@ -309,7 +309,7 @@ export const Form = ({ inviteeId, inviteeName }: FormProps) => {
                                 <div className="flex flex-col gap-2 group/companion w-full">
                                   <Label
                                     htmlFor="companionName"
-                                    className="text-sm font-medium transition-all duration-300 group-focus-within/companion:text-accent"
+                                    className="text-xs font-medium transition-all duration-300 group-focus-within/companion:text-accent"
                                   >
                                     <div className="flex items-center gap-2">
                                       <UserPlus className="h-4 w-4 transition-transform group-focus-within/companion:scale-110" />
@@ -323,11 +323,11 @@ export const Form = ({ inviteeId, inviteeName }: FormProps) => {
                                       {...field}
                                       id="companionName"
                                       placeholder="Nombre de tu +1"
-                                      className="relative w-full transition-all duration-300 focus:shadow-xl"
+                                      className="relative w-full transition-all duration-300 focus:shadow-xl text-sm"
                                     />
                                   </div>
                                   {errors.companionName && (
-                                    <div className="flex items-center gap-2 text-sm text-danger animate-slide-in-down">
+                                    <div className="flex items-center gap-2 text-xs text-danger animate-slide-in-down">
                                       <AlertCircle className="h-4 w-4 animate-pulse" />
                                       <span>{errors.companionName.message}</span>
                                     </div>

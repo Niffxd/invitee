@@ -43,10 +43,10 @@ export const SparklesBackground = () => {
             animationDelay: `${sparkle.delay}s`,
             backgroundColor:
               sparkle.id % 3 === 0
-                ? "var(--palette-bronze)"
+                ? "var(--palette-lilac)"
                 : sparkle.id % 3 === 1
-                  ? "var(--palette-sage)"
-                  : "var(--palette-papaya)",
+                  ? "var(--palette-lilac)"
+                  : "var(--palette-lilac)",
             opacity: 0.45,
             transform: `translateY(${scrollY * (sparkle.id % 3) * 0.05}px)`,
             transition: 'transform 0.1s ease-out',

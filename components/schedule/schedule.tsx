@@ -3,14 +3,14 @@ import { Card } from "./components";
 
 export const Schedule = () => {
   return (
-    <div className="relative p-8">
+    <div className="relative p-6">
       <div className="relative max-w-xl mx-auto space-y-3">
         {/* Single Column Layout */}
         <div className="space-y-3">
           {/* Date Card */}
           <Card
             title="Fecha"
-            description="Sábado 25 de Abril"
+            description="Sábado 25 de Abril de 2026"
             icon={<CalendarFold className="size-6 text-accent" strokeWidth={2} />}
             className="animate-slide-in-up"
           />
@@ -18,7 +18,7 @@ export const Schedule = () => {
           {/* Time Card */}
           <Card
             title="Horario"
-            description="22:00 - 06:00"
+            description="22:00 hs - 06:00 hs."
             icon={<Clock4 className="size-6 text-accent" strokeWidth={2} />}
             className="animate-slide-in-up"
           />

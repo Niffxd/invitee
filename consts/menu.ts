@@ -1,0 +1,1 @@
+export const menuNextChildText = ["Confirmar tu asistencia", "Opcional: 1 invitado"];

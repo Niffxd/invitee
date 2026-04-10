@@ -19,12 +19,12 @@ export const Card = ({
         <div className="relative transform transition-all duration-300 group-hover:-translate-y-0.5">
           <CardHeroui className={`w-full p-4 backdrop-blur-md bg-surface/92 border border-border/40 shadow-[0_12px_40px_-12px_color-mix(in_oklch,var(--palette-bronze)_18%,transparent)] transition-all duration-300 ${className}`}>
             <div className="flex gap-3">
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-linear-to-br from-accent-soft to-primary/20 ring-1 ring-border/50 shadow-inner">
+              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-linear-to-br from-accent-soft to-primary/20 ring-1 ring-border/50 shadow-inner">
                 {icon}
               </div>
               <div className="flex-1">
                 <span className="text-xs font-medium text-muted block mb-0.5">{title}</span>
-                <span className="text-base sm:text-lg font-bold text-foreground">{description}</span>
+                <p className="text-xs font-bold text-foreground">{description}</p>
                 {children && children}
               </div>
             </div>

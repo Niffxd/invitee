@@ -147,7 +147,7 @@ export const Carousel = ({ children, hasNextChild = false }: CarouselProps) => {
                 {hasNextChild && index < totalPages - 1 && (
                   <NextChild
                     text={nextChildTexts[index]}
-                    icon={<ArrowBigDown className="w-12 h-12 text-primary relative z-50 animate-bounce-gentle transition-transform" />}
+                    icon={<ArrowBigDown className="w-10 h-10 text-primary relative z-50 animate-bounce-gentle transition-transform" />}
                   />
                 )}
               </div>

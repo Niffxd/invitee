@@ -1,7 +1,7 @@
 const productionPath = "https://invitee-ivan.vercel.app";
 const developmentPath = "http://localhost:3000";
 
-export const invitationText = "Buenas! Espero estés bien! Voy a festejar mi cumpleaños y me gustaría que estés ahí!\n\nHice una app para que puedas confirmar tu asistencia, ahí mismo se encuentran los detalles, espero que te guste!\nLink: ";
+export const invitationText = "Holaaa te invitamos a celebrar nuestro cumpleaños\n\nHice una app para que puedas confirmar tu asistencia, ahí mismo se encuentran los detalles!\nLink: ";
 
 export const invitationPath = `${process.env.NODE_ENV === "production"
   ? productionPath

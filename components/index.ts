@@ -1,5 +1,5 @@
-export * from "./carousel";
 export * from "./background";
+export * from "./carousel";
 export * from "./copy-button";
 export * from "./dashboard";
 export * from "./details";
@@ -8,7 +8,7 @@ export * from "./gradient";
 export * from "./home";
 export * from "./loading";
 export * from "./login";
-export * from "./home";
+export * from "./menu";
 export * from "./radio-button";
 export * from "./schedule";
 export * from "./select";

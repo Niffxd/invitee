@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { getInvitee } from "@/helpers";
 import { InviteeProps } from "@/types";
 import { Welcome } from "./components";
-import { Wrapper, Carousel, Schedule, Details, Form } from "@/components";
+import { Wrapper, Carousel, Schedule, Details, Form, Menu } from "@/components";
 
 export const Home = () => {
   const searchParams = useSearchParams();
@@ -64,6 +64,7 @@ export const Home = () => {
         <Welcome inviteeId={inviteeId} />
         <Schedule />
         <Details />
+        <Menu />
         <Form inviteeId={inviteeId} inviteeName={invitee.name} />
       </Carousel>
     </Wrapper>

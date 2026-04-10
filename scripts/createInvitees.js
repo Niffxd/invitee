@@ -82,6 +82,43 @@ const invitees = [
   "Maca Palomares",
   "Flor Agüero",
   "Matias (Fuegas)",
+  "Andrea P",
+  "Abril",
+  "Luli",
+  "Cinthya",
+  "Anita",
+  "Julieta",
+  "Marianita",
+  "Marina",
+  "Pacha",
+  "Ana G.",
+  "Laura",
+  "Ana L.",
+  "Juli",
+  "Pali",
+  "Adrianita",
+  "Rocio Abdala",
+  "Virginia",
+  "Naty",
+  "Paola",
+  "Emilse",
+  "Cechu",
+  "Gaby",
+  "Cinthya",
+  "Alvaro",
+  "Conrado",
+  "Dani",
+  "Gisella",
+  "Sil",
+  "Lucho",
+  "Malelo",
+  "Vichi",
+  "Rocio Fleitas",
+  "Emanuel",
+  "Maria Silvia Meuli",
+  "Maria Silvia Macasso",
+  "Marcela",
+  "Daniela",
 ];
 
 /**
@@ -110,20 +147,20 @@ const createInvitees = async (names) => {
 
 async function createAllInvitees() {
   try {
-    console.log('Reading invitee list...\n');
+    console.log("Reading invitee list...\n");
 
     let inviteeCount = invitees.length;
 
     await createInvitees(invitees);
 
-    console.log('\n=================================\n');
-    console.log('Migration completed successfully!\n');
+    console.log("\n=================================\n");
+    console.log("Migration completed successfully!\n");
     console.log(`✅ Migrated: ${inviteeCount}\n`);
-    console.log('\n=================================\n');
+    console.log("\n=================================\n");
 
     process.exit(0);
   } catch (error) {
-    console.error('\n❌ Migration failed:', error);
+    console.error("\n❌ Migration failed:", error);
     process.exit(1);
   }
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { Toast } from "@heroui/react";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SparklesBackground, GradientBackground } from "@/components";
 import "./globals.css";
 
@@ -15,8 +16,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="light" data-theme="light" suppressHydrationWarning lang="es">
+    <html
+      className="light"
+      data-theme="light"
+      suppressHydrationWarning
+      lang="es"
+    >
       <body className="bg-background text-foreground">
+        <Analytics />
         <SpeedInsights />
         <Toast.Container placement="bottom" />
         <SparklesBackground />

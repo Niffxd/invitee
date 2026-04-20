@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, Check, Pencil, Trash2, Ellipsis } from "lucide-react";
+import { AlertCircle, Check, /* Pencil, */ Trash2, Ellipsis } from "lucide-react";
 import { deleteInvitee, showToast } from "@/helpers";
 import { InviteesActionsCellProps } from "./types";
 
@@ -40,14 +40,14 @@ export const InviteesActionsCell = ({
   };
 
   return (
-    <div className="flex items-center gap-2 py-3 px-3">
-      <button
+    <div className="flex justify-center items-center gap-2 py-3 px-3">
+      {/* <button
         onClick={(e) => {
           e.stopPropagation();
         }}
       >
         <Pencil className="w-4 h-4" />
-      </button>
+      </button> */}
       <button
         onClick={(e) => {
           e.stopPropagation();

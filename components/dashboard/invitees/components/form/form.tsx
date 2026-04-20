@@ -134,7 +134,7 @@ export const NewInviteeForm = () => {
                   className="relative mb-2 animate-fade-in"
                   style={{ animationDelay: "0.2s", animationFillMode: "both" }}
                 >
-                  <h1 className="text-2xl sm:text-3xl font-bold bg-linear-to-r from-accent via-primary to-accent bg-clip-text text-transparent animate-gradient-shift mb-3">
+                  <h1 className="text-lg font-bold bg-linear-to-r from-accent via-primary to-accent bg-clip-text text-transparent animate-gradient-shift mb-1">
                     Crear nuevo invitado
                   </h1>
                   {/* Decorative line with animation */}
@@ -162,7 +162,7 @@ export const NewInviteeForm = () => {
                       <div className="flex flex-col gap-2 group/name w-full">
                         <Label
                           htmlFor="name"
-                          className="text-sm font-medium transition-all duration-300 group-focus-within/name:text-accent"
+                          className="text-xs font-medium transition-all duration-300 group-focus-within/name:text-accent"
                         >
                           <div className="flex items-center gap-2">
                             <User className="h-4 w-4 transition-transform group-focus-within/name:scale-110" />
@@ -176,11 +176,11 @@ export const NewInviteeForm = () => {
                             {...field}
                             id="name"
                             placeholder="Nombre completo"
-                            className="relative w-full transition-all duration-300 focus:shadow-xl"
+                            className="relative w-full transition-all duration-300 focus:shadow-xl text-sm"
                           />
                         </div>
                         {errors.name && (
-                          <div className="flex items-center gap-2 text-sm text-danger animate-slide-in-down">
+                          <div className="flex items-center gap-2 text-xs text-danger animate-slide-in-down">
                             <AlertCircle className="h-4 w-4 animate-pulse" />
                             <span>{errors.name.message}</span>
                           </div>
@@ -214,7 +214,7 @@ export const NewInviteeForm = () => {
                           <div className="flex items-center justify-between">
                             <Label
                               htmlFor="notes"
-                              className="text-sm font-medium transition-all duration-300 group-focus-within/notes:text-accent"
+                              className="text-xs font-medium transition-all duration-300 group-focus-within/notes:text-accent"
                             >
                               Notas adicionales
                             </Label>
@@ -236,11 +236,11 @@ export const NewInviteeForm = () => {
                               aria-label="Notas adicionales"
                               placeholder="Notas adicionales sobre el invitado..."
                               rows={4}
-                              className="relative w-full transition-all duration-300 focus:shadow-xl"
+                              className="relative w-full transition-all duration-300 focus:shadow-xl text-sm"
                             />
                           </div>
                           {errors.notes && (
-                            <div className="flex items-center gap-2 text-sm text-danger animate-slide-in-down">
+                            <div className="flex items-center gap-2 text-xs text-danger animate-slide-in-down">
                               <AlertCircle className="h-4 w-4 animate-pulse" />
                               <span>{errors.notes.message}</span>
                             </div>
@@ -289,7 +289,7 @@ export const NewInviteeForm = () => {
                             <div className="flex flex-col gap-2 group/plusOne w-full">
                               <Label
                                 htmlFor="plusOneName"
-                                className="text-sm font-medium transition-all duration-300 group-focus-within/plusOne:text-accent"
+                                className="text-xs font-medium transition-all duration-300 group-focus-within/plusOne:text-accent"
                               >
                                 <div className="flex items-center gap-2">
                                   <UserPlus className="h-4 w-4 transition-transform group-focus-within/plusOne:scale-110" />
@@ -303,11 +303,11 @@ export const NewInviteeForm = () => {
                                   {...field}
                                   id="plusOneName"
                                   placeholder="Nombre del acompañante"
-                                  className="relative w-full transition-all duration-300 focus:shadow-xl"
+                                  className="relative w-full transition-all duration-300 focus:shadow-xl text-sm"
                                 />
                               </div>
                               {errors.plusOneName && (
-                                <div className="flex items-center gap-2 text-sm text-danger animate-slide-in-down">
+                                <div className="flex items-center gap-2 text-xs text-danger animate-slide-in-down">
                                   <AlertCircle className="h-4 w-4 animate-pulse" />
                                   <span>{errors.plusOneName.message}</span>
                                 </div>

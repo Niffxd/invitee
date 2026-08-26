@@ -11,6 +11,9 @@ export const getInviteeStats = async (): Promise<InviteeStats[]> => {
     const invitees = await getInvitees();
     const plusOnes = await getAllPlusOne();
 
+    console.log("Fetched invitees:", invitees);
+    console.log("Fetched plus ones:", plusOnes);
+
     const plusOneConfirmed = plusOnes.length;
     const total = invitees.length + plusOneConfirmed;
     const confirmed = invitees.filter((invitee) => invitee.isConfirmed).length + plusOneConfirmed;
